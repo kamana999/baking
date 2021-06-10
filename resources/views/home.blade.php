@@ -1,5 +1,7 @@
 @extends('base')
 @section('content')
+
+
 <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -7,11 +9,11 @@
     <div class="carousel-inner">
         @foreach($banners as $key => $slider)
         <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
-            <img style="width: 100%; height: 400px;" width="10px" height="100px"src="{{url('upload/'.$slider->image)}}" class="d-block w-100" height="500px" alt="..."> 
+            <img style="width: 100%; height: 450px;" width="10px"src="{{url('upload/'.$slider->image)}}" class="d-block w-100" alt="..."> 
             <div class="carousel-caption">
-                    <h2 style="color:green">Personalised Gifts</h2>
-                    <p style="color: green;">Inspired By Life Created By You</p>
-                    <a href="Product.html" class="btn"
+                    <h2 style="color:green">{{$slider->title}}</h2>
+                    <p style="color: green;">{{$slider->description}}</p>
+                    <a href="{{route('shop_cakes')}}" class="btn"
                         style="background-color: green; color: white; padding-left: 20px; padding-right: 20px">SHOP
                         NOW <i class="fas fa-chevron-right"></i>
                     </a>
@@ -26,62 +28,135 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
     </a>
 </div>
-<br>
-<div class="container7">
-        <div class="btn-group btn-group-sm">
-            <button type="button" class="btn" style="border-radius: 10px;"><i class="fas fa-gifts fa-2x"></i>
-                <br><a href="" style="color: white;" class="text-decoration-none">Find Perfect Gifts</a> </button>
-            <div class="vl"></div>
 
-            <button type="button" class="btn" style="border-radius: 10px;"><i class="fas fa-gifts fa-2x"></i><br> <a
-                    href="" style="color: white;"class="text-decoration-none">Personalised
-                    Gifts </a></button>
-            <div class="vl"></div>
-            <button type="button" class="btn" style="border-radius: 10px;"><i
-                    class="fas fa-birthday-cake fa-2x"></i><br> <a href="" class="text-decoration-none"style="color: white;">
-                    Cakes
-                </a></button>
-            <div class="vl"></div>
-            <button type="button" class="btn" style="border-radius: 10px;"><i class="fas fa-seedling fa-2x"></i><br><a
-                    href="" class="text-decoration-none" style="color: white;"> Plants
-                </a></button>
-            <div class="vl"></div>
-            <button type="button" class="btn" style="border-radius: 10px;"><i class="fas fa-child fa-2x"></i><br> <a
-                    href="" class="text-decoration-none" style="color: white;">Fathers Day Gift
-                </a></button>
-            <div class="vl"></div>
-            <button type="button" class="btn" style="border-radius: 10px;"><i class="fas fa-truck fa-2x"></i><br> <a
-                    href="" style="color: white;" class="text-decoration-none">Same Day
-                    delivery</a></button>
-        </div>
-</div>
-<br>
-<br>
+<div class="container-fluid mt-3" style="background:#f2f2f2">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+            <div class="col-lg">
+            <a href="" class="text-decoration-none" data-toggle="modal" data-target="#cat_modal">
+                <img src="{{asset('Images/Index/Nikon_Camera_cake_11_800x.jpg')}}" alt="Responsive image "class="img-fluid z-depth-1 rounded-circle mt-4 mb-3 me-5" style=" height:120px; width: 120px;cursor: pointer">
+                <p class="text-dark text-justify text-center font-weight-bold">Personlized Cake</p>
+            </a>
 
-
-<div class="container1" id="browsegifts">
-        <h1>Browse By Categories</h1>
-        <div class="row">
-            @foreach($categories as $c)
-            
-                <div class="col-lg-4 col-md-6 col-sm-12 col-12 mt-3">
-                    <div class="card l-bg-cherry" style="height: 100px; border-radius: 20px;">
-                        <div class="card-statistic-3 p-4">
+            <div class="modal fade" id="cat_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Personilized Cake </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    @guest
+                    <a href="{{route('new_login')}}" class="text-decoration-none"><h6 class="text-danger">Login First To Order</h6></a>
+                    @endguest
+                    <form action="{{route('customize')}}" method="POST" enctype="multipart/form-data" class="p-3">
+                                @csrf
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contact</label>
+                                    <input type="text" name="contact" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control"  name="description"rows="3"></textarea>
+                                </div>
+                                
                         
-                            <div class="card-icon card-icon-large"><i class="fas fa-birthday-cake"></i></div>
-                            <div class="mb-4 threeD">
-                                <h5 class="card-title mb-0">{{$c->cat_title}}</h5>
-                                <a class="card-link" href="{{route('category',$c->id)}}"></a>
+                                <div class="mb-4">
+                                    <label for="">Weight Type</label>
+                                    <select name="weight_type" id="weight_type" class="form-control">
+                                        <option value="pound">Pound</option>
+                                        <option value="kg">KG</option>
+                                           
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Weight</label>
+                                    <input type="text" name="weight" class="form-control">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="">Shape</label>
+                                    <input type="text" name="shape" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="">Flavour</label>
+                                    <input type="text" name="flavour" class="form-control">
+                                </div>
+                                
+                        
+                                <div class="mb-3">
+                                    <label class="form-label">Cake Images</label>
+                                    <input type="file" name="image" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cake Thumbnails</label>
+                                    <input type="file" name="images[]" class="form-control" multiple>
+                                </div>
+                                <div class="col-12 mt-2">
+                                <div class="d-grid">
+                                    <input type="submit" class="btn btn-primary w-100">    
+                                   
+                                </div>
                             </div>
-                            
-                        </div>
+                            </form>    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                     </div>
                 </div>
+            </div>
+
+            </div>
+                @foreach($categories as $c)
+                     <div class="col-lg col-md-6 col-sm-12 col-12">
+                         <a href="{{route('category',$c->id)}}" class="text-decoration-none">
+                              <img src="{{url('upload/'.$c->image)}}" alt="Responsive image "class="img-fluid z-depth-1 rounded-circle mt-4 mb-3 me-5" style=" height:120px; width: 120px;cursor: pointer">
+                                <p class="text-dark text-justify text-center font-weight-bold">{{$c->cat_title }}</p>
+                             </a>
+                     </div>
+                @endforeach   
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-sm-12" style="">
+                <div class="section-header text-center">
+                    <p class="h2" style="color:green">Fresh Cake & Perfect for all Occasions</p>
+                    <p class="text-success">3 Hour Delivery & Free Shipping in India. 71,382 cakes for your Beloved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    @foreach($categories as $c)
+                        <div class="col-lg-3 view overlay zoom bg-transparent">
+                            <a href="{{route('category',$c->id)}}" class="text-decoration-none">
+                                <img src="{{url('upload/'.$c->image)}}" alt="Responsive image " class="img-fluid z-depth-1 rounded mb-3" style="height: 40vh; width: 40vw; cursor: pointer">
+                                <p class="h5 text-muted text-center font-weight-bold text-justify" style="font-weight:25px">{{$c->cat_title }}</p>
             
-            @endforeach
-            
-</div>  
-    <br>
+                                </a>
+                        </div>
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 <section class="best-gift-under-300"> 
         <div class="container4">
@@ -95,17 +170,20 @@
                                 <div class="shadow-effect-2" style="box-shadow: 1px 1px grey;">
                                     <img src="{{url('upload',$c->image)}}" height="225px" width="200px"
                                         alt="Card image cap">
-                                    <div class="ribbon"><span class="ribbon__content"
-                                            style="background-color: rgb(49, 1, 1); outline: 5px solid rgb(49, 1, 1);">Personalised</span>
-                                    </div>
+                                    
                                     <div class="card-body">
                                         <h5 class="card-title" style="color: #8ea47e;">{{$c->title}}</h5>
-                                        <p class="card-text" style="color: #e8bbb5;">{{$c->price}}</p>
+                                        @if($c->discount_price)
+                                        <h5 class=" h5 text-uppercase text-danger">₹{{ $c->discount_price }}  <del class="text-muted h6  ">₹ {{ $c->price }}</del></h5>
+                                        @else
+                                        <h5 class="mb-2 text-danger">₹{{ $c->price }}</5>
+                                        @endif
+                                        <p class="text-success">Get it {{$c->delivired}}</p>
                                         <span class="fa fa-star checked"></span>
                                         <span class="fa fa-star checked"></span>
                                         <span class="fa fa-star checked"></span>
                                         <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
                                     </div>
                                 </div>
                             </a>
@@ -118,40 +196,7 @@
 </section>
     <br>
 
-    <section class="shop-by-personality">
-        <div class="container3">
-            <h1>Veg Cakes</h1>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="shopbypersonality" class="owl-carousel">
-                    @foreach($cakes as $c)
-                    @if($c->isVeg == 'yes')
-                        <div class="item">
-                            <div class="shadow-effect">
-                            
-                                <img class="card-img-top" src="{{url('upload',$c->image)}}" height="125px" width="200px"
-                                    alt="Card image cap">
-                                    <div class="ribbon"><span class="ribbon__content"
-                                            style="background-color: green; outline: 5px solid rgb(49, 1, 1);">Veg</span>
-                                    </div>
-                                <div class="card-body">
-                                    <h5 class="card-title" style="color: #8ea47e;">{{$c->title}}
-                                    </h5>
-                                    <p class="card-text">{{$c->description}}
-                                    </p>
-                                    <a href="Product.html" class="btn"
-                                        style="background-color:#8ea47e;  color: white;">Shop
-                                        Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                    @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  
 
 
 

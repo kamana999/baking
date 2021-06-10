@@ -51,17 +51,21 @@ class AreaController extends Controller
             'name'=>'required',
         ];
 
-        $time = $request->delivery_time;
-        $time = implode(',',$time);
+            foreach($request->delivery_time as $name){
+                $data[] = $name;
+            }
+        
+        // $time = $request->delivery_time;
+        // $time = implode(',',$time);
 
-        $input = $request->except('delivery_time');
-        $input['delivery_time'] = $time;
+        // $input = $request->except('delivery_time');
+        // $input['delivery_time'] = $time;
 
         $area = new Area();
         $area->name = $request->name;
         $area->pincode = $request->pincode;
         $area->district_id = $request->district_id;
-        $area->delivery_time = $time;
+        $area->delivery_time =json_encode($data);
         $area->delivery_charge = $request->delivery_charge;
         $area->save();
         return redirect()->back();
@@ -103,8 +107,12 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        $time = $request->delivery_time;
-        // $time = implode(',',$time);
+        foreach($request->delivery_time as $name){
+            $data[] = $name;
+        }
+        // $time = $request->delivery_time;
+        // $data[] = $time;
+        // $time = json_encode(',',$time);
         
         $input = $request->except('delivery_time');
         $input['delivery_time'] = $time;
@@ -113,7 +121,7 @@ class AreaController extends Controller
         $area->name = $request->name;
         $area->pincode = $request->pincode;
         $area->district_id = $request->district_id;
-        $area->delivery_time = $time;
+        $area->delivery_time = $data;
         $area->delivery_charge = $request->delivery_charge;
         $area->save();
         return redirect()->route('areas.index');

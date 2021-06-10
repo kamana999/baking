@@ -335,119 +335,113 @@
                             <p class="product-description">{{$oi->cake->description}}</p>
                         </div>
                         <div class="product-price">
-                        <span class="d-block m-0 text-danger h5">{{$oi->cake->discount_price}}</span>
-                            <span class="d-block m-0 text-muted small"><del>{{$oi->cake->price}}</del></span></div>
+                        @if($oi->cake->discount_price)
+                            <span class="d-block m-0 text-danger h5">₹{{$oi->cake->discount_price}}</span>
+                            <span class="d-block m-0 text-muted small"><del>₹{{$oi->cake->price}}</del></span>
+                        @else
+                            <span class="d-block m-0 text-danger h5">₹{{$oi->cake->price}}</span>
+                        @endif
+                        </div>
                         <div class="product-quantity">
                             <a href="{{route('removecart',['id'=>$oi->cake->id])}}" class="text-decoration-none text-danger " style="font-size:30px">-</a>
                             <span>{{$oi->qty}}</span>
-                            <a href="{{route('add_to_cart',['id'=>$oi->cake->id])}}" class="text-decoration-none text-success" style="font-size:20px">+</a>
+                            <a href="{{route('add_to_cart_details',['id'=>$oi->cake->id])}}" class="text-decoration-none text-success" style="font-size:20px">+</a>
                             </td>
                         </div>
                         <div class="product-removal">
                             <a href="{{route('removeitem',['id'=>$oi->cake->id])}}"><button class="remove-product">Remove </button></a>
                         </div>
-                        <div class="product-line-price"> <span class="d-block m-0 text-danger h5">{{$discount = $oi->qty*$oi->cake->discount_price}}</span>
-                            <span class="d-block m-0 text-muted small"><del>{{$totals = $oi->qty*$oi->cake->price}}</del>
-                            </span></div>
+                        <div class="product-line-price"> 
+                            @if($oi->cake->discount_price)
+                                <span class="d-block m-0 text-danger h5">{{$discountTotal = $oi->qty*$oi->cake->discount_price}}</span>
+                                <span class="d-block m-0 text-muted small"><del>{{$total = $oi->qty*$oi->cake->price}}</del></span>
+                            @else
+                            <span class="d-block m-0 text-danger h5">{{$total = $oi->qty*$oi->cake->price}}</span>
+                            @endif
+                        </div>
                     </div>
-                @endforeach
+                
 
                 <div class="totals">
                         <div class="totals-item">
                             <label>Subtotal</label>
+                            @if($oi->cake->discount_price)
                             <div class="totals-value" id="cart-subtotal">{{$discountTotal}}</div>
+                            @else
+                            <div class="totals-value" id="cart-subtotal">{{$total}}</div>
+                            @endif
                         </div>
                         <div class="totals-item">
                             <label>GST(18%)</label>
+                            @if($oi->cake->discount_price)
                             <div class="totals-value" id="cart-tax">{{$tax = $discountTotal*18/100}}</div>
+                            @else
+                            <div class="totals-value" id="cart-tax">{{$tax = $total*18/100}}</div>
+                            @endif
                         </div>
                         @if($coupon->coupon_id)
-                        <div class="totals-item">
-                            <label>Coupon Ammount</label>
-                            <a href="{{route('coupon.destroy')}}" class="text-danger p-4">Remove</a>
-                            <div class="totals-value" id="cart-shipping">{{$coupon->coupon->amount}}</div>
-                        </div>
-                        <div class="totals-item totals-item-total">
-                            <label>Grand Total</label>
-                            <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal-$coupon->coupon->amount}}</div>
-                        </div>
+
+                            @if($coupon->coupon->type == 'percentage')
+                            <?php 
+                                if($oi->cake->discount_price)
+                                $coupons = $discountTotal*$coupon->coupon->value/100;
+                                else
+                                $coupons = $total*$coupon->coupon->value/100;
+                            ?>
+                            @else
+                            <?php $coupon = $coupon->coupon->value;?>
+                            @endif
+                            <div class="totals-item">
+                                
+                                @if($coupon->coupon->type == 'percentage')
+                                    <label>Coupon Value</label>
+                                    <div class="totals-value" id="cart-shipping">{{$coupon->coupon->value}}%</div>
+                                    <label>Coupon Ammount</label>
+                                    <div class="totals-value" id="cart-shipping">{{$coupons}}</div>
+                                @else
+                                    <div class="totals-value" id="cart-shipping">{{$coupon->coupon->value}}</div>
+                                @endif
+                                <a href="{{route('coupon.destroy')}}" class="text-danger mb-5">Remove Coupon</a>
+                            </div>
+                            <div class="totals-item totals-item-total">
+                                <label>Grand Total</label>
+                                @if($oi->cake->discount_price)
+                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal-$coupons}}</div>
+                                @else
+                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $total-$coupons}}</div>
+                                @endif
+                            </div>
                         @endif
                         @if(!$coupon->coupon_id)
-                        <div class="totals-item totals-item-total">
-                            <label>Grand Total</label>
-                            <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal}}</div>
-                        </div>
-                        <div class="totals-item totals-item-total">
-                            <label>Coupon Code</label>
-                            <div class="">
-                            <form action="{{route('cart.coupon')}}" method="post" class="d-flex">
-                                @csrf
-                                <input type="text" name="coupon_code" required>
-                                <input type="submit" value="Apply"class="btn btn-sm btn-dark">
-                            </form>
-                            </div>   
-                        </div>
+                            <div class="totals-item totals-item-total">
+                                <label>Grand Total</label>
+                                @if($oi->cake->discount_price)
+                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal}}</div>
+                                @else
+                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $total}}</div>
+                                @endif
+                            </div>
+                            <div class="totals-item totals-item-total">
+                                <label>Coupon Code</label>
+                                <div class="">
+                                <form action="{{route('cart.coupon')}}" method="post" class="d-flex">
+                                    @csrf
+                                    <input type="text" name="coupon_code" required>
+                                    <input type="submit" value="Apply"class="btn btn-sm btn-dark">
+                                </form>
+                                </div>   
+                            </div>
                         @endif
+                        </div>
+                    <a href="{{route('checkout')}}"><button class="checkout">Checkout</button></a>
                 </div>
+                @endforeach
+                </div>
+                
                 
 
 
-<!-- 
-                @if($coupon->coupon_id)
-                    <div class="totals">
-                        <div class="totals-item">
-                            <label>Subtotal</label>
-                            <div class="totals-value" id="cart-subtotal">{{$discountTotal}}</div>
-                        </div>
-                        <div class="totals-item">
-                            <label>GST(18%)</label>
-                            <div class="totals-value" id="cart-tax">{{$tax = $discountTotal*18/100}}</div>
-                        </div>
-                        <div class="totals-item">
-                            <label>Coupon Ammount</label>
-                            <a href="{{route('coupon.destroy')}}" class="text-danger p-4">Remove</a>
-                            <div class="totals-value" id="cart-shipping">{{$coupon->coupon_id}}</div>
-                        </div>
-                        <div class="totals-item totals-item-total">
-                            <label>Grand Total</label>
-                            <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal}}</div>
-                        </div>
-                @else
-                    <div class="totals">
-                        <div class="totals-item">
-                            <label>Subtotal</label>
-                            <div class="totals-value" id="cart-subtotal">{{$discountTotal}}</div>
-                        </div>
-                        <div class="totals-item">
-                            <label>GST(18%)</label>
-                            <div class="totals-value" id="cart-tax">{{$tax = $discountTotal*18/100}}</div>
-                        </div>
-                        <div class="totals-item">
-                            <label>Coupon Ammount</label>
-                            <div class="totals-value" id="cart-shipping">00</div>
-                        </div>
-                        <div class="totals-item totals-item-total">
-                            <label>Grand Total</label>
-                            <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal}}</div>
-                        </div>
-                @endif
 
-                @if(!$coupon->coupon_id)
-                    <div class="totals-item totals-item-total">
-                        <label>Coupon Code</label>
-
-                        <div class="">
-                        <form action="{{route('cart.coupon')}}" method="post" class="d-flex">
-                            @csrf
-                            <input type="text" name="coupon_code" required>
-                            <input type="submit" value="Apply"class="btn btn-sm btn-dark">
-                        </form>
-                        </div>   
-                    </div>
-                @endif -->
-                </div>
-                    <a href="{{route('checkout')}}"><button class="checkout">Checkout</button></a>
-                </div>
                 
     </div>
 

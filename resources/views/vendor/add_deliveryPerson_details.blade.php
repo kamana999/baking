@@ -1,4 +1,4 @@
-@extends('admin.base')
+@extends('vendor.base')
 @section('content')
 
 
@@ -28,7 +28,7 @@
                             <div class="row">
                             <div class="col-lg-12">
                             <div class="border border-3 p-4 rounded">
-                            <form action="{{route('submitdetails',['id'=>$vendorss->id])}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('submitdetails')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="">Name<span class="text-danger"> * </span></label>

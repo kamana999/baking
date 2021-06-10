@@ -51,11 +51,11 @@ class VendorDelivery extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Delivery_Person $delivery)
+    public function show(Delivery_Person $delivery_boy)
     {
         $data = [
-            'delivery'=>$delivery,
-            // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            'delivery'=>$delivery_boy,
+            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('vendor.show_delivery',$data);
     }
@@ -66,12 +66,12 @@ class VendorDelivery extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Delivery_Person $delivery)
+    public function edit(Delivery_Person $delivery_boy)
     {
         $data = [
-            'edits'=>$delivery,
+            'edits'=>$delivery_boy,
             'users'=>User::where(array(['isAdmin',0],['isVendor',0],['isStaff',1]))->get(),
-            // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('vendor.edit_delivery',$data);
     }
@@ -83,7 +83,7 @@ class VendorDelivery extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Delivery_Person $delivery)
+    public function update(Request $request,Delivery_Person $delivery_boy)
     {
         if($request->image or $request->pancard or $request->bank_passbook or $request->driving_license){
             
@@ -110,7 +110,7 @@ class VendorDelivery extends Controller
             $request->driving_license== null;
         }
 
-        $staff = $delivery;
+        $staff = $delivery_boy;
         $staff->name = $request->input('name');
         $staff->contact = $request->input('contact');
         $staff->contact2 = $request->input('contact2');
@@ -119,10 +119,10 @@ class VendorDelivery extends Controller
         $staff->status = $request->input('status');
         $staff->work_time = $request->input('work_time');
         $staff->vehicle = $request->input('vehicle');
-        $staff->user_id = $delivery->user_id;
-        $staff->vendor_id = $delivery->vendor_id;
+        $staff->user_id = $delivery_boy->user_id;
+        $staff->vendor_id = $delivery_boy->vendor_id;
         $staff->save();
-        return redirect()->route('delivery.index');
+        return redirect()->route('delivery-boy.index');
     }
 
     /**
@@ -131,9 +131,9 @@ class VendorDelivery extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Delivery_Person $delivery)
+    public function destroy(Delivery_Person $delivery_boy)
     {
-        $delivery->delete();
+        $delivery_boy->delete();
         return redirect()->back();
     }
 }

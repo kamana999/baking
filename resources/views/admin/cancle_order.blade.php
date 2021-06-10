@@ -22,8 +22,11 @@
 										   <tr>
 											   <th>Tracking ID</th>
 											   <th>Products Name</th>
-											   <th>Date</th>
+											   <th>Delivery Date</th>
+											   <th>Delivery Time</th>
+											   <th>Delivery Address</th>
 											   <th>Status</th>
+											   <th>Action</th>
 											   
 										   </tr>
 									   </thead>
@@ -48,11 +51,35 @@
 
 												</div>
 											   </td>
-											   <td>{{$o->created_at}}</td>
+											   <td>
+												<div class="d-flex align-items-center">
+													@if($o->orderitem)
+													@foreach($o->orderitem as $oi)
+													<div class="ms-2">
+														<h6 class="mb-1 font-14">{{$oi->delivery_date}},</h6>
+														
+													</div>
+													@endforeach
+													@endif
+												</div>
+												</td>
+												<td>
+												<div class="d-flex align-items-center">
+													@if($o->orderitem)
+													@foreach($o->orderitem as $oi)
+													<div class="ms-2">
+														<h6 class="mb-1 font-14">{{$oi->delivery_time}},</h6>
+														
+													</div>
+													@endforeach
+													@endif
+												</div>
+												</td>
+											   <td>{{$o->address->name}}({{$o->address->contact}}){{$o->address->street}},{{$o->address->area->name}}{{$o->address->district->name}},({{$o->address->state->name}})</td>
 											   <td class=""><a href=""><span class="btn btn-sm bg-danger text-light w-100">Cancled</span></a></td>
 								
 											   <td>
-												
+											   <a href="{{route('show_orders',$o->id)}}" class=" btn btn-sm text-info bg-light-info border-0"><i class='bx bxs-show'></i></a>
 											   </td>
                                             
 										   </tr>

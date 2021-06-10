@@ -229,158 +229,49 @@
 											   <th>Products Name</th>
 											   <th>Date</th>
 											   <th>Status</th>
-											   <th>Price</th>
+											
 											   <th>Actions</th>
 										   </tr>
 									   </thead>
 									   <tbody>
+									   @foreach($orders as $o)
 										   <tr>
-											   <td>#55879</td>
+                                           
+											   <td>00000A{{$o->id}}</td>
 											   <td>
 												<div class="d-flex align-items-center">
-													<div class="recent-product-img">
-														<img src="assets/images/products/15.webp" alt="">
-													</div>
+													
+													@if($o->orderitem)
+													@foreach($o->orderitem as $oi)
 													<div class="ms-2">
-														<h6 class="mb-1 font-14">Light Red T-Shirt</h6>
+														<h6 class="mb-1 font-14">{{$oi->cake->title}},</h6>
+														<h6 class="mb-1 font-14">{{$oi->delivery_date}},</h6>
 													</div>
+													
+													@endforeach
+													@endif
 												</div>
 											   </td>
-											   <td>22 Jun, 2020</td>
-											   <td class=""><span class="badge bg-light-success text-success w-100">Completed</span></td>
-											   <td>#149.25</td>
+											   <td>{{$o->created_at}}</td>
+											   @if($o->isPending)
+											   <td class=""><a href=""><span class="btn btn-sm bg-warning text-light-warning w-100">Pending</span></a></td>
+											   @elseif($o->isConfirm)
+											   <td class=""><a href=""><span class="btn btn-sm bg-primary text-light-primary w-100">confirm</span></a></td>
+											   @elseif($o->outForDelivery)
+											   <td class=""><a href=""><span class="btn btn-sm bg-info text-light-info w-100">OutForDelivery</span></a></td>
+											   @elseif($o->orderCompleted)
+											   <td class=""><a href=""><span class="btn btn-sm bg-success text-light-success w-100">confirm</span></a></td>
+												@elseif($o->isCancle)
+												<td class=""><a href=""><span class="btn btn-sm bg-danger text-light-success w-100">Cancle</span></a></td>
+												@endif
 											   <td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
+												<div class="d-flex order-actions">	<a href="{{route('cancle_order',$o->id)}}" class=" btn btn-sm text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
+				
 												</div>
 											   </td>
+                                            
 										   </tr>
-										   <tr>
-											<td>#88379</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/16.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Grey Headphone</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-danger text-danger w-100">Cancelled</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>#68823</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/19.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Grey Hand Watch</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-warning text-warning w-100">Pending</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>#54869</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/07.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Brown Sofa</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-success text-success w-100">Completed</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>#22536</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/17.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Black iPhone 11</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-success text-success w-100">Completed</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>#25796</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/14.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Men Yellow T-Shirt</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-warning text-warning w-100">Pending</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>#98754</td>
-											<td>
-											 <div class="d-flex align-items-center">
-												 <div class="recent-product-img">
-													 <img src="assets/images/products/08.webp" alt="">
-												 </div>
-												 <div class="ms-2">
-													 <h6 class="mb-1 font-14">Grey Stand Table</h6>
-												 </div>
-											 </div>
-											</td>
-											<td>22 Jun, 2020</td>
-											<td class=""><span class="badge bg-light-danger text-danger w-100">Cancelled</span></td>
-											<td>#149.25</td>
-											<td>
-												<div class="d-flex order-actions">	<a href="javascript:;" class="text-danger bg-light-danger border-0"><i class='bx bxs-trash'></i></a>
-													<a href="javascript:;" class="ms-4 text-primary bg-light-primary border-0"><i class='bx bxs-edit' ></i></a>
-												</div>
-											</td>
-										</tr>
+										   @endforeach
 									   </tbody>
 								   </table>
 							   </div>

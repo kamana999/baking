@@ -1,4 +1,4 @@
-@extends('admin.base')
+@extends('vendor.base')
 @section('content')
 
 
@@ -28,7 +28,7 @@
                             <div class="row">
                             <div class="col-lg-12">
                             <div class="border border-3 p-4 rounded">
-                            <form action="{{route('delivery.update',$edits->id)}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('delivery-boy.update',$edits->id)}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="mb-3">

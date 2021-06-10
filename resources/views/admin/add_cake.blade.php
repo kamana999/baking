@@ -114,6 +114,10 @@
                                     <label class="form-label">Cake Images</label>
                                     <input type="file" name="image" class="form-control">
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cake Thumbnails</label>
+                                    <input type="file" name="images[]" class="form-control" multiple>
+                                </div>
                                 <div class="col-12 mt-2">
                                 <div class="d-grid">
                                     <input type="submit" class="btn btn-primary w-100">    
@@ -132,4 +136,7 @@
 
 			</div>
 		</div>
+
+
+
 

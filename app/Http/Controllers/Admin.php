@@ -13,6 +13,7 @@ use App\Models\Delivery_Person;
 use App\Models\Area;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Customize;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -38,9 +39,36 @@ class Admin extends Controller
             'vendors'=>Vendor::all()->count(),
             'users'=>User::where(array(['isVendor',0],['isAdmin',0],['isStaff',0]))->count(),
             'vendor'=>Vendor::all(),  
+            'orders'=>Order::where('ordered',1)->limit(20)->get(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin/dashboard', $data);
+    }
+
+    public function personlized(){
+        $customize = Customize::where('ordered',1)->get();
+        $data = [
+            'customize'=>$customize,
+        ];
+        return view('admin.personilize_order',$data);
+    }
+
+    public function users(){
+        $user = User::where(array(['isAdmin',0],['isVendor',0],['isStaff',0]))->get();
+        $data = [
+            'users' => $user,
+        ];
+        return view('admin.user',$data);
+    }
+
+    public function profile(){
+        $user_id = Auth::id();
+        $user = Vendor::where(array(['user_id',$user_id]))->first();
+        $data = [
+            'profile'=>$user,
+        ];
+        return view('admin.profile',$data);
+
     }
 
     public function vendor(Request $request){
@@ -132,8 +160,25 @@ class Admin extends Controller
             'description'=>'required',
             'image'=>'required',
         ]);
-        $filename = time(). "." . $request->image->extension();
-        $request->image->move(public_path("upload"), $filename);
+        // $image = $request->file('images');
+        // if($request->hasFile('images')){
+        //     foreach ($request->file('images') as $item) {
+        //         $filename = time(). "." . $item->extension();
+        //         $item->move(public_path("upload"), $filename);
+        //         $files[] = $filename;
+        //     }
+        //     // $images = implode(',',$files);
+        // }
+        if($request->hasFile('images')){
+            foreach($request->file('images')as $image){
+                $name = $image->getClientOriginalName();
+                $image->move(public_path('upload'),$name);
+                $data[] = $name;
+            }
+        }
+        $filename1 = time(). "." . $request->image->extension();
+        $request->image->move(public_path("upload"), $filename1);
+
         $cake = new Cake();
         $cake->category_id = $request->category_id;
         $cake->title = $request->title;
@@ -149,7 +194,8 @@ class Admin extends Controller
         $cake->serve = $request->serve;
         $cake->delivired = $request->delivired;
         $cake->parent_id = $request->parent_id;
-        $cake->image = $filename;
+        $cake->image = $filename1;
+        $cake->images = json_encode($data);
         $cake->save();
         return redirect()->back();
     }
@@ -168,15 +214,22 @@ class Admin extends Controller
     public function updatecake(Request $request ,$id){
 
         $cake = Cake::findOrFail($id);
-
         if($request->image){
-            
-            $filename = time(). "." . $request->image->extension();
+            $filename1 = time(). "." . $request->image->extension();
             $request->image->move(public_path("upload"), $filename);
-            $cake->image = $filename;
+            $cake->image = $filename1;
+        }
+        elseif($request->hasFile('images')){
+            foreach($request->file('images')as $image){
+                $name = $image->getClientOriginalName();
+                $image->move(public_path('upload'),$name);
+                $data[] = $name;
+            }
+            $cake->images = json_encode($data);
         }
         else{
             $request->image == null;
+            $request->images == null;
         }
         
         $cake = $cake;
@@ -290,11 +343,10 @@ class Admin extends Controller
     }
 
     public function orders(Request $request){
-        $order = Order::where(array(['ordered',1],['isPending',1]))->first();
+        $order = Order::where(array(['ordered',1],['isPending',1]))->get();
         $data = [
             'categories'=>Category::all()->count(),
             'vendor'=>Vendor::all(),  
-            // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'orderitem'=>Order::where(array(['isPending',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
@@ -302,15 +354,70 @@ class Admin extends Controller
     }
 
     public function order_confirm(){
-        $order = Order::where(array(['isConfirm',1],['ordered',1]))->first();
+        $order = Order::where(array(['isConfirm',1],['ordered',1]))->get();
         $data = [
             'categories'=>Category::all()->count(),
-            'vendor'=>Vendor::all(),
-            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            // 'vendor'=>Vendor::where('id',$order->id)->first(),
             'orderitem'=>Order::where(array(['isConfirm',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.order_confirm',$data);
+    }
+
+    public function out_for_delivery(){
+        $order = Order::where(array(['outForDelivery',1],['ordered',1]))->get();
+        $data = [
+            'categories'=>Category::all()->count(),
+            'orderitem'=>Order::where(array(['outForDelivery',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
+        ];
+        return view('admin.out_for_delivery', $data);   
+    }
+
+    public function order_completed(){
+        $order = Order::where(array(['orderCompleted',1],['ordered',1]))->first();
+        $data = [
+            'categories'=>Category::all()->count(),
+            // 'vendor'=>Vendor::where('id',$order->vendor_id)->first(),
+            'orderitem'=>Order::where(array(['orderCompleted',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
+        ];
+        return view('admin.order_completed', $data);   
+    }
+
+    public function cancle(){
+        $data = [
+            'categories'=>Category::all()->count(),
+            'vendor'=>Vendor::all(),  
+            
+            'orderitem'=>Order::where(array(['isCancle',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
+        ];
+        return view('admin.cancle_order', $data);
+    }
+
+    public function assign_vendor($order_id){
+        $order = Order::find($order_id); 
+        $vendor = Vendor::whereHas('area',function($query) use ($order){$query->where('pincode',$order->area);})->get();
+        $data = [
+            'categories'=>Category::all()->count(),
+            'order'=>$order,
+            'vendors'=>$vendor,
+        ];
+        return view('admin.assign_vendor',$data);
+    }
+
+    public function submit_vendor($order_id){
+        $order = Order::find($order_id);
+        $vendor = request('vendor');
+        $vendor_id = Vendor::where('id',$vendor)->first();
+        $v = Vendor::find($vendor_id->id);
+        $order->isConfirm = 1;
+        $order->vendor_id = $vendor_id->id;
+        $order->isPending = 0;
+        $order->save();
+        return redirect()->route('order_confirm');
+
     }
 
     public function cancle_order($order_id){
@@ -322,47 +429,22 @@ class Admin extends Controller
         $data = [
             'categories'=>Category::all()->count(),
             'vendor'=>Vendor::all(),  
-            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'orderitem'=>Order::where(array(['isCancle',1],['ordered',1]))->get(),
-            // 'order'=>Order::find($order->id)->orderitem,
-        ];
-        return view('admin.cancle_order', $data);
-    }
-    public function cancle(){
-        $data = [
-            'categories'=>Category::all()->count(),
-            'vendor'=>Vendor::all(),  
-            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'orderitem'=>Order::where(array(['isCancle',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.cancle_order', $data);
     }
 
-    public function assign_delivery_boy($order_id){
+    public function show_orders($order_id){
+    
         $order = Order::find($order_id);
-        $delivery_boy = Delivery_Person::where('status','active')->get();
         $data = [
-            'delivery'=>$delivery_boy,  
             'categories'=>Category::all()->count(),
             'vendor'=>Vendor::all(),  
-            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'order'=>$order,
-
+            'orders'=>$order,
         ];
-        return view('admin.assign_delivery',$data);
+        return view('admin.show_orders',$data);
     }
-    public function submit_delivery_boy($order_id){
-        $order = Order::find($order_id);
-        $delivery = request('delivery');
-        $delivery_boy = Delivery_Person::where('id',$delivery)->first();
-        $d = Delivery_Person::find($delivery_boy->id);
-        $order->delivery_id = $delivery_boy->id;
-        $order->isConfirm = 1;
-        $order->isPending = 0;
-        $order->save();
-        $d->status = "inactive";
-        $d->save();
-        return redirect()->route('order_confirm');
-    }
+
 }

@@ -18,6 +18,12 @@ class Order extends Model
         return $this->hasOne('App\Models\Coupon', 'id', 'coupon_id');
     }
     public function delivery_boy(){
-        return $this->hasOne('App\Models\Delivery_Person', 'id', 'delivery_id');
+        return $this->hasOne('App\Models\Delivery_Person', 'id', 'delivery_boy_id');
+    }
+    public function vendor(){
+        return $this->hasOne('App\Models\Vendor','id','vendor_id');
+    }
+    public function address(){
+        return $this->hasOne('App\Models\Address','id','address_id');
     }
 }

@@ -8,6 +8,7 @@ use App\Models\State;
 use App\Models\District;
 use App\Models\Area;
 use App\Models\Cake;
+use App\Models\Order;
 use App\Models\Category;
 use App\Models\Delivery_Person;
 use Auth;
@@ -27,17 +28,33 @@ class Vendors extends Controller
             return redirect()->route('details');
         } 
         $vendor = Vendor::where('user_id',Auth::id())->firstOrFail();
+        $orders = Order::where('vendor_id',Auth::id())->count();
+        $order = Order::where('vendor_id',Auth::id())->get();
+        $delivery = Delivery_Person::where('vendor_id',Auth::id())->count();
+        $delivery_person = Delivery_Person::where('vendor_id',Auth::id())->get();
         $data = [
 
             'categories'=>Category::all()->count(),
+            'category'=>Category::all(),
             'vendor'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'cakes'=>Cake::where(array(['vendor_id', $vendor->id]))->count(),
-            'cake' => Cake::where(array(['vendor_id',$vendor->id]))->get(),
-           
+            'orders'=>$orders,
+            'delivery'=>$delivery,
+            'order'=>$order,
+            'delivery_person'=>$delivery_person,
             
         ];
         return view('vendor.vendor',$data);
     }   
+
+    public function profile(){
+        $user_id = Auth::id();
+        $user = Vendor::where(array(['user_id',$user_id]))->first();
+        $data = [
+            'profile'=>$user,
+        ];
+        return view('vendor.profile',$data);
+
+    }
 //vendor details
     public function details(){
         if(Vendor::where('user_id', Auth::id())->exists()){
@@ -85,11 +102,12 @@ class Vendors extends Controller
 
 // delivery boy
 
-    public function staff(Request $request, $vendor_id){
-
+    public function staff(Request $request){
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'staffs'=>Delivery_Person::where(array(['vendor_id', $vendor_id]))->get(),
+            'staffs'=>Delivery_Person::where(array(['vendor_id', $vendor->id]))->get(),
         ];
         return view('vendor.delivery_person',$data);
     }
@@ -128,7 +146,7 @@ class Vendors extends Controller
         return view('vendor.add_deliveryPerson_details',$data);
     }
 
-    public function submitdetails(Request $request, $vendor_id){
+    public function submitdetails(Request $request){
         $request->validate([
             'contact'=>'required|numeric|min:10',
             'address'=>'required|string',
@@ -141,7 +159,8 @@ class Vendors extends Controller
             'user_id'=>'required',
         ]);
 
-        $vendor = $vendor_id;
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
         $filename = time(). "." . $request->image->extension();
         $pancards = time(). "." . $request->pancard->extension();
         $bank_passbooks = time(). "." . $request->bank_passbook->extension();
@@ -161,7 +180,7 @@ class Vendors extends Controller
         $staff->work_time = $request->input('work_time');
         $staff->vehicle = $request->input('vehicle');
         $staff->user_id = $request->input('user_id');
-        $staff->vendor_id = $vendor;
+        $staff->vendor_id = $vendor->id;
         $staff->image = $filename;
         $staff->pancard = $pancards;
         $staff->bank_passbook =$bank_passbooks;
@@ -171,13 +190,68 @@ class Vendors extends Controller
     }
 
     public function order(){
-        $order = Order::where('ordered',1)->get();
         $vendor = Auth::id();
-        $orderitem =  $$order->orderitem;
+        $order = Order::where(array(['isConfirm',1],['ordered',1],['vendor_id',$vendor]))->get();
         $data = [
-            ''
+            'categories'=>Category::all()->count(),
+            'orderitem'=>Order::where(array(['vendor_id',$vendor],['isConfirm',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
         ];
+        return view('vendor.order',$data);
+    }
 
-        return view('vendor.orders',$data);
+
+    public function assign_delivery_boy($order_id){
+        $order = Order::find($order_id);
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
+        $delivery_boy = Delivery_Person::where(array(['vendor_id',$vendor->id], ['status','active']))->get();
+        $data = [
+            'delivery'=>$delivery_boy,  
+            'categories'=>Category::all()->count(),
+            'vendor'=>Vendor::all(),  
+            'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            'order'=>$order,
+
+        ];
+        return view('vendor.assign_delivery',$data);
+    }
+    public function submit_delivery_boy($order_id){
+        $order = Order::find($order_id);
+        $delivery = request('delivery');
+        $delivery_boy = Delivery_Person::where('id',$delivery)->first();
+        $d = Delivery_Person::find($delivery_boy->id);
+        $order->delivery_boy_id = $delivery_boy->id;
+        $order->outForDelivery = 1;
+        $order->isConfirm = 0;
+        $order->save();
+        $d->status = "inactive";
+        $d->save();
+        return redirect()->route('vendor_out_for_delivery');
+    }
+
+    public function vendor_out_for_delivery(){
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
+        $order = Order::where(array(['vendor_id',$vendor->id],['outForDelivery',1],['ordered',1]))->get();
+        $data = [
+            'categories'=>Category::all()->count(),
+            'orderitem'=>Order::where(array(['vendor_id',$vendor->id],['outForDelivery',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
+        ];
+        return view('vendor.out_for_delivery', $data);   
+    }
+
+    public function vendor_order_completed(){
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
+        $order = Order::where(array(['vendor_id',$vendor->id],['orderCompleted',1],['ordered',1]))->get();
+        $data = [
+            'categories'=>Category::all()->count(),
+            'orderitem'=>Order::where(array(['vendor_id',$vendor->id],['orderCompleted',1],['ordered',1]))->get(),
+            // 'order'=>Order::find($order->id)->orderitem,
+        ];
+        return view('vendor.order_completed', $data); 
+
     }
 }

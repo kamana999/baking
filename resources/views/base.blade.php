@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    
+    <link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{url('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')}}">
     <script src="{{url('https://kit.fontawesome.com/a076d05399.js')}}"></script>
@@ -13,23 +16,83 @@
     <link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css')}}">
     <link rel="stylesheet" href="{{asset('style.css')}}">
     <link href="{{url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css')}}" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-</head> 
+   </head> 
 <body>
 
-    <div class="banner">
-        <a href="">
-            <h2>Browse Gifts</h2>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:#8ea47e">
+  <div class="container">
+    <a class="navbar-brand" href="{{route('home')}}" id=""><img src="{{asset('Images/Index/Atrium logo (1)-01.png')}}" height="40px" width="50px"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <form class="d-flex me-auto" action="/search" method="GET">
+            @csrf
+            <input class="form-control ms-5" name="searching" type="search" placeholder="Search Cakes Here" aria-label="Search" size="40">
+            <button class="btn btn-success" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg></button>
+        </form>
+        @if(!$area)
+        <a href=""class="btn btn-success btn-sm me-auto p-2" style="font-weight: 550" data-toggle="modal" data-target="#form"style="color: white;">
+                <i class="fas fa-map-marker-alt"></i> Select Delievery Location 
         </a>
-        <span>
-            <a href="#"><i class="fas fa-dollar-sign" style="padding-right: 25px; color: white;"></i></a>
-            <a href="#"><i class="fas fa-map-marker-alt" style="padding-right: 25px; color: white;"></i></a>
-            <a href="cart2.html"><i class="fas fa-shopping-bag" style="padding-right: 25px; color: white;"></i></a>
-        </span>
+        @else
+        <a href=""class="btn btn-success btn-sm me-auto p-2" style="font-weight: 550" data-toggle="modal" data-target="#form"style="color: white;">
+                <i class="fas fa-map-marker-alt"></i>Delievery Location - {{$area->pincode}}
+        </a>
+        @endif
+        <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('shop_cakes')}}"><strong>Cakes</strong></a>
+        </li>
+        @guest
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('new_login')}}">Cart<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart4 ms-2" viewBox="0 0 16 16">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+            </svg></a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{route('new_login')}}">Login</a></li>
+       
+        @endguest
+        @auth
+        <li class="nav-item">
+        
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            {{Auth::User()->name}}
+            </a>
+            <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item">
+                <form action="{{route('logout')}}" method="POST">
+                    <a href="" class="dropdown-item"><input type="submit" class="btn btn-sm" value="Logout" ></a>
+                    @csrf
+                </form>
+                </a></li>
+            </ul>
+        </div>   
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('cart')}}">Cart<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart4 ms-2" viewBox="0 0 16 16">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+            </svg></a>
+        </li>
+        @endauth
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('aboutus')}}">Help<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill ms-2" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+            </svg></a>
+        </li>
+      </ul>
     </div>
-    <header>
+  </div>
+</nav>
+
+    <!-- <header> -->
         <!--NAVIGATION-->
-        <div class="topnav" id="myTopnav">
-            <a href="{{route('home')}}" id="logo"><img src="{{asset('Images/Index/Atrium logo (1)-01.png')}}"></a>
+        <!-- <div class="topnav" id="myTopnav">
+            <a href="{{route('home')}}" ><img src=""></a>
             <div class="Form" style="position: absolute;  padding-left: 200px; padding-top: 2px;">
                 <form class="form-inline" id="#search">
                     <input class="form-control me-2" type="search" placeholder="Search Gifts" aria-label="Search"
@@ -37,9 +100,19 @@
                     <button class="btn my-2 my-sm-0" type="submit"><i class="fas fa-search"
                             style="color: #8ea47e"></i></button>
                 </form>
-        </div>
+        </div> -->
+        <!-- <div class="topnav" id="myTopnav">
+            <a href="{{route('home')}}" ><img src=""></a>
+            <div class="Form" style="position: absolute;  padding-left: 200px; padding-top: 2px;">
+                <form class="form-inline" id="#search">
+                    <input class="form-control me-2" type="search" placeholder="Search Gifts" aria-label="Search"
+                        style="padding-top: 20px; padding-bottom: 20px;">
+                    <button class="btn my-2 my-sm-0" type="submit"><i class="fas fa-search"
+                            style="color: #8ea47e"></i></button>
+                </form>
+        </div> -->
 
-            <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            <!-- <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content" style="border-radius: 10px;">
@@ -73,23 +146,23 @@
                 </div>
             </div>
         @auth   
-        <div class="dropdown">
-            <a class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            {{Auth::User()->name}}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item">
-                <form action="{{route('logout')}}" method="POST">
-                    <a href="" class="dropdown-item"><input type="submit" value="Logout" class="btn"></a>
-                    @csrf
-                </form>
-                </a></li>
-            </ul>
-        </div> 
+            <div class="dropdown">
+                <a class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                {{Auth::User()->name}}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item">
+                    <form action="{{route('logout')}}" method="POST">
+                        <a href="" class="dropdown-item"><input type="submit" value="Logout" class="btn"></a>
+                        @csrf
+                    </form>
+                    </a></li>
+                </ul>
+            </div> 
         @endauth
         @guest
-        <a href="{{route('register')}}">Signup</a>
-        <a href="{{route('login')}}">Login</a>
+            <a href="{{route('register')}}">Signup</a>
+            <a href="{{route('login')}}">Login</a>
         @endguest
             <a href="aboutus.html" class="animate">About Us</a>
             <a href="contact.html" class="animate">Contact Us</a>
@@ -101,19 +174,21 @@
 
             <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 
-        </div>
-    </header>
+        </div> -->
+    <!-- </header> -->
 
     <div id="navbar">
-        <a href="home.html" id="logo"><img src="{{asset('Images/Index/Atrium logo (1)-01.png')}}"></a>
+      
+       <a href="{{route('home')}}" id="logo"><img src="{{asset('Images/Index/Atrium logo (1)-01.png')}}"></a>
         <div class="Form" style="position: absolute;  padding-left: 200px; padding-top: 2px;">
-            <form class="form-inline" id="#search">
-                <input class="form-control me-2" type="search" placeholder="Search Gifts" aria-label="Search"
-                    style="padding-top: 20px; padding-bottom: 20px;">
-                <button class="btn my-2 my-sm-0" type="submit"><i class="fas fa-search"
-                        style="color: #8ea47e"></i></button>
-            </form>
+        <form class="d-flex me-auto">
+        <input class="form-control ms-5" type="search" placeholder="Search" aria-label="Search" size="40">
+        <button class="btn btn-success" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        </svg></button>
+      </form>
         </div>
+           
         @auth   
         <div class="dropdown">
             <a class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -128,33 +203,85 @@
                 </a></li>
             </ul>
         </div>   
-          
+       
+            <a class="nav-link" href="{{route('cart')}}">Cart<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart4 ms-2" viewBox="0 0 16 16">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+            </svg></a>
+   
         @endauth
+        <a class="nav-link" href="{{route('aboutus')}}">Help<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill ms-2" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+        </svg></a>
         @guest
-        <a href="{{route('register')}}">Signup</a>
-        <a href="{{route('login')}}">Login</a>
+        <a href="{{route('new_login')}}">Login</a>
+    
+            <a class="nav-link" href="{{route('new_login')}}">Cart<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart4 ms-2" viewBox="0 0 16 16">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+            </svg></a>
+        
         @endguest
-        <a href="aboutus.html" class="animate">About Us</a>
-        <a href="contact.html" class="animate">Contact Us</a>
-        <a href="index.html" class="animate">Home</a>
-        <a href="" class="btn" data-toggle="modal" data-target="#form"
-            style="background-color: #8ea47e; color: white; padding-top: 10px; padding-bottom: 10px;">
-            <i class="fas fa-map-marker-alt"></i> Select Delievery Location
-        </a>
+            <a class="nav-link" href="{{route('shop_cakes')}}"><strong>Cakes</strong></a>
+            @if(!$area)
+            <a href=""class="btn btn-success btn-sm me-auto p-2 text-light" style="" data-toggle="modal" data-target="#form"style="color: white;">
+                    <i class="fas fa-map-marker-alt"></i> Select Delievery Location 
+            </a>
+            @else
+            <a href=""class="btn btn-success btn-sm me-auto p-2 text-light" style="" data-toggle="modal" data-target="#form"style="color: white;">
+                    <i class="fas fa-map-marker-alt"></i>Delievery Location - {{$area->pincode}}
+            </a>
+            @endif
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light bootsnav">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+    <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="border-radius: 10px;">
+                        <div class="modal-header border-bottom-0">
+                            <h5 class="modal-title" id="exampleModalLabel">Choose Your Delievery Location</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <div class="myradio">
+                                    <input type="radio" name="myRadio" id="one" class="myradio__input" checked>
+                                    <label for="one" class="myradio__label">Within India</label>
+                                </div>
+                                <div class="myradio">
+                                    <input type="radio" name="myRadio" id="two" class="myradio__input">
+                                    <label for="two" class="myradio__label">Outside India</label>
+                                </div>
+                                <form action="{{route('home')}}" method="GET">
+                                
+                                <div class="form-group" style="box-shadow: 2px solid palevioletred">
+                                    <input type="text" class="form-control" id="password2" placeholder="Enter Pincode" name="search">
+                                </div>
+                            </div>
+                            <div class="modal-footer border-top-0 d-flex justify-content-center">
+                                <input type="submit" class="btn" style="background-color: #e8bbb5; color: white;">
+                            </div>
+                            </form>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light bootsnav p-0">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown1"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown1">
             <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="" data-toggle="modal" data-target="#cat_modal" class="nav-link"><strong>Personilized Cakes</strong></a>
+            </li>
               @foreach ($categories as $c)
                 @if($c->parent_id == null)
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-uppercase" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" style="padding-left: 60px; padding-right: 20px;">
+                    <a class="nav-link dropdown-toggle text-uppercase ms-3 " href="#" style="font-size:small" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" >
                         {{$c->cat_title}}
                     </a>
                     @if ($c->children)
@@ -239,6 +366,10 @@
         </div>
     </div>
   </body>
+
+  <script src="{{url('http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js')}}" type="text/javascript"></script>
+    <script src="{{url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js')}}" type="text/javascript"></script>
+    <link href="{{url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css')}}" rel="Stylesheet" type="text/css" />
 
 <script src="{{url('https://code.jquery.com/jquery-3.2.1.slim.min.js')}}"integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"crossorigin="anonymous"></script>
 <script src="{{url('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')}}"></script>

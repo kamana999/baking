@@ -51,7 +51,32 @@
 						<div class="menu-title">Admin Dashboard</div>
 					</a>
 				</li>
-				
+				<li class="menu-label">Forms & Tables</li>
+					<li>
+						<a class="has-arrow" href="javascript:;">
+							<div class="parent-icon"><i class='bx bx-message-square-edit'></i>
+							</div>
+							<div class="menu-title">Orders</div>
+						</a>
+						<ul>
+							<li> <a href="{{route('order')}}"><i class="bx bx-right-arrow-alt"></i>Recent Order</a>
+							<li> <a href="{{route('order_confirm')}}"><i class="bx bx-right-arrow-alt"></i>Confirm Order Details</a>
+							<li> <a href="{{route('out_for_delivery')}}"><i class="bx bx-right-arrow-alt"></i>outForDelivery</a>
+							<li> <a href="{{route('order_completed')}}"><i class="bx bx-right-arrow-alt"></i>OrderCompleted</a>
+							<li> <a href="{{route('cancle')}}"><i class="bx bx-right-arrow-alt"></i>Cancle Orders </a></li>		
+						</ul>
+					</li>
+
+					<li>
+						<a class="has-arrow" href="javascript:;">
+							<div class="parent-icon"><i class='bx bx-message-square-edit'></i>
+							</div>
+							<div class="menu-title">Personlized Orders</div>
+						</a>
+						<ul>
+							<li> <a href="{{route('personlized')}}"><i class="bx bx-right-arrow-alt"></i>Recent Order</a>
+						</ul>
+					</li>
 				<li class="menu-label">UI Elements</li>
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -193,28 +218,13 @@
 						<div class="menu-title">Users</div>
 					</a>
 					<ul>
-						<li> <a href="ecommerce-products-details.html"><i class="bx bx-right-arrow-alt"></i>User Details</a>
+						<li> <a href="{{route('users_detail')}}"><i class="bx bx-right-arrow-alt"></i>User Details</a>
 						</li>
 					</ul>
 				</li>
-				<li class="menu-label">Forms & Tables</li>
-					<li>
-					<a class="has-arrow" href="javascript:;">
-						<div class="parent-icon"><i class='bx bx-message-square-edit'></i>
-						</div>
-						<div class="menu-title">Orders</div>
-					</a>
-					<ul>
-						<li> <a href="{{route('order')}}"><i class="bx bx-right-arrow-alt"></i>Recent Order</a>
-						<li> <a href="{{route('order_confirm')}}"><i class="bx bx-right-arrow-alt"></i>Confirm Order Details</a>
-						<li> <a href="{{route('cancle')}}"><i class="bx bx-right-arrow-alt"></i>Cancle Orders </a>
-						</li>		
-					</ul>
-					</li>
-				
 				<li class="menu-label">Pages</li>
 				<li>
-					<a href="user-profile.html">
+					<a href="{{route('profile')}}">
 						<div class="parent-icon"><i class="bx bx-user-circle"></i>
 						</div>
 						<div class="menu-title">Profile</div>
@@ -589,7 +599,7 @@
                                @auth 
 								<p class="user-name mb-0">{{Auth::User()->name}}</p>
                                 @endauth
-								<p class="designattion mb-0">Web Designer</p>
+								<p class="designattion mb-0">{{Auth::User()->email}}</p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">

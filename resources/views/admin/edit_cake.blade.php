@@ -116,10 +116,19 @@
                                     <img src="{{url('upload/'.$edits->image)}}" height="80" width="80" alt="">
                                     <input type="file" name="image" class="form-control">
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cake Thumbnails</label>
+                                  
+
+                                    <?php foreach (json_decode($edits->images)as $picture) { ?>
+                                    <img src="{{ asset('/upload/'.$picture) }}" style="height:60px; width:70px"/>
+                                    <?php } ?>
+
+                                    <input type="file" name="images[]" class="form-control" multiple>
+                                </div>
                                 <div class="col-12 mt-2">
                                 <div class="d-grid">
                                     <input type="submit" class="btn btn-primary w-100">    
-                                   
                                 </div>
                             </div>
                             </form>

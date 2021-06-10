@@ -19,6 +19,28 @@ use App\Models\District;
 use Auth;
 class Home extends Controller
 {
+
+    public function login(Request $r){
+        if ($r->search == ""){
+            $data = [
+                'categories'=>Category::all(),
+                'banners'=>Banner::where(array(['status','active']))->get(),
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>null,
+            ];
+            return view('login',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $data = [
+                'categories'=>Category::all(),
+                'banners'=>Banner::where(array(['status','active']))->get(),
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('login',$data);
+        }
+    }
     public function index (Request $r){ 
         
         if(User::where([['id',Auth::id()],['isAdmin',1]])->exists()){
@@ -27,13 +49,14 @@ class Home extends Controller
         elseif(User::where([['id',Auth::id()],['isVendor',1]])->exists()){
             return redirect()->route('vendorDashboard');
         }
+        $area = $r->input('search');
         
         if ($r->search == ""){
             $data = [
                 'categories'=>Category::all(),
                 'banners'=>Banner::where(array(['status','active']))->get(),
-                'cakes'=>Cake::all(),
-                
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>null,
             ];
             return view('home', $data);
         }
@@ -48,8 +71,9 @@ class Home extends Controller
             $data = [
                 'categories'=>Category::all(),
                 'banners'=>Banner::where(array(['status','active']))->get(),
-                'cakes'=>Cake::whereIn('vendor_id',$fillter)->get(),
-               
+                // 'cakes'=>Cake::whereIn('vendor_id',$fillter)->get(),
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>Area::where('pincode',$search)->first(),
                 
             ];
             return view('home',$data);
@@ -60,51 +84,197 @@ class Home extends Controller
         if ($request->search == ""){
             $data = [
                 'categories'=>Category::all(),
-                'cakes'=> Cake::where(array(['category_id', $cat_id]))->get(),
-                
+                'cakes'=> Cake::where(array(['category_id', $cat_id]))->with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>null,
             ];
             return view('fillter', $data);
         }
         else{
             $search = $request->input('search');
-            $fillter = Vendor::whereHas('area',function($query) use ($search){$query->where('pincode','like',$search);})->pluck('id');
+            // $fillter = Vendor::whereHas('area',function($query) use ($search){$query->where('pincode','like',$search);})->pluck('id');
             $data = [
                 'categories'=>Category::all(),
-                'cakes'=> Cake::where(array(['category_id', $cat_id],['vendor_id',$fillter]))->get(),
-                
+                'cakes'=> Cake::where(array(['category_id', $cat_id]))->with('children')->whereNull('parent_id')->limit(10)->get(),
+                'area'=>Area::where('pincode',$search)->first(),
             ];
             return view('fillter', $data);
         }
         
     }
 
+    public function aboutus(Request $r){
+        if ($r->search == ""){
+            $data = [
+                'categories'=>Category::all(),
+                'area'=>null,
+            ];
+            return view('aboutus',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $data = [
+                'categories'=>Category::all(),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('aboutus',$data);
+        }
+    }
+
+    public function shop_cakes(Request $r){
+        if ($r->search == ""){
+            $data = [
+                'categories'=>Category::all(),
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
+                'area'=>null,
+            ];
+            return view('shop_cakes',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $data = [
+                'categories'=>Category::all(),
+                'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('shop_cakes',$data);
+        }
+    }
+
     public function cake(Request $request, $cake_id){
         $cake = Cake::where(array(['id', $cake_id]))->firstOrFail();
+        $area = $request->input('area');
         $data = [
             'categories'=>Category::all(),
             'cakes'=> Cake::where(array(['id', $cake_id]))->firstOrFail(),
-            'related'=> Cake::where('category_id', '=', $cake->category->id)->where('id', '!=', $cake->id)->get(),
-            
+            'related'=> Cake::where('category_id', '=', $cake->category->id)->where('id', '!=', $cake->id)->with('children')->whereNull('parent_id')->get(),
+            'upgrade'=>Cake::where('id', '!=', $cake->id)->where('title', $cake->title)->get(),
+            'area'=>Area::where('pincode',$area)->first(),
         ];
         return view('cake', $data);
     }
 
-    public function cart(){
-        $user_id = Auth::id();    
-        $order = Order::where([['ordered',0],['user_id',$user_id]])->first();
-        if(!$order){
-             return redirect()->route('home');
-        }
+    public function search_area(Request $request, $cake_id){
+        $cake = Cake::where(array(['id', $cake_id]))->firstOrFail();
+        $area = $request->input('area');
+        $search = Area::where('pincode',$area)->get();
         $data = [
-            "categories"=>Category::all(),
-            "orderitem"=>Order::find($order->id)->orderitem,
-            "coupon"=>Order::find($order->id),
+            'categories'=>Category::all(),
+            'cakes'=> Cake::where(array(['id', $cake_id]))->firstOrFail(),
+            'related'=> Cake::where('category_id', '=', $cake->category->id)->where('id', '!=', $cake->id)->with('children')->whereNull('parent_id')->get(),
+            'upgrade'=>Cake::where('id', '!=', $cake->id)->where('title', $cake->title)->get(),
+            'area'=>Area::where('pincode',$area)->first(),
         ];
-        return view('add_to_cart',$data);
+        return view('cake',$data);
+
     }
 
-    public function add_to_cart($cake_id){
+    public function search(Request $r){
+        if ($r->search == ""){
+            $search = $r->input('searching');
+            // $key = trim($request->get('q'));
+
+            $cakes = Cake::query()->where('title', 'like', "%{$search}%")->orWhere('category_id', 'like', "%{$search}%")
+                ->orderBy('created_at', 'desc')->get();
+            $data = [
+                'categories'=>Category::all(),
+                'cakes'=>$cakes,
+                'area'=>null,
+                
+            ];
+            return view('search',$data);
+        }
+        else{
+            $search = $r->input('searching');
+            // $key = trim($request->get('q'));
+
+            $cakes = Cake::query()->where('title', 'like', "%{$search}%")->orWhere('category_id', 'like', "%{$search}%")
+                ->orderBy('created_at', 'desc')->get();
+            $data = [
+                'categories'=>Category::all(),
+                'cakes'=>$cakes,
+                'area'=>Area::where('pincode',$search)->first(),
+                
+            ];
+            return view('search',$data);
+        }
+    }
+
+    public function cart(Request $r){
+        if ($r->search == ""){
+            $user_id = Auth::id();    
+            $order = Order::where([['user_id',$user_id],['ordered',0]])->first();
+            $orders = Order::where([['user_id',$user_id],['ordered',0]])->doesntExist();
+            
+            if ($orders){
+                return redirect()->route('home');
+            }
+            $data = [
+                "categories"=>Category::all(),
+                "orderitem"=>Order::find($order->id)->orderitem,
+                "coupon"=>Order::find($order->id),
+                'area'=>null
+            ];
+            return view('add_to_cart',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $user_id = Auth::id();    
+            $order = Order::where([['user_id',$user_id],['ordered',0]])->first();
+            $orders = Order::where([['user_id',$user_id],['ordered',0]])->doesntExist();
+            if ($orders){
+                return redirect()->route('home');
+            }
+            $data = [
+                "categories"=>Category::all(),
+                "orderitem"=>Order::find($order->id)->orderitem,
+                "coupon"=>Order::find($order->id),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('add_to_cart',$data);
+        }
+    
+    }
+
+    public function add_to_cart(Request $request,$cake_id){
         $user_id = Auth::id();
+        $delivery_date = request('delivery_date');
+        $isveg = request('isVeg');
+        $message = request('message');
+        $area = request('area');
+        $delivery_time = request('delivery_time');
+        $order = Order::firstOrCreate([
+            'user_id'=>$user_id,
+            'ordered'=>0,
+        ]);
+        $order->area = $area;
+        $order->save();
+        $oi = OrderItem::where(array(['order_id',$order->id],['cake_id',$cake_id]))->first();
+        if($oi){
+            $qty=$oi->qty+1;
+            $oi->qty=$qty;
+            $oi->save();
+        }
+        else{
+            $orderItem = new OrderItem();
+            $orderItem->order_id=$order->id;
+            $orderItem->user_id=$user_id;
+            $orderItem->ordered=0;
+            $orderItem->cake_id=$cake_id;
+            $orderItem->delivery_date=$delivery_date;
+            $orderItem->isVeg=$isveg;
+            $orderItem->message=$message;
+            $orderItem->delivery_time=$delivery_time;
+            $orderItem->qty=1;
+            $orderItem->save();
+        } 
+        return redirect()->route('cart')->with('success','Item added successfully !!');
+    }
+
+    public function add_to_cart_details($cake_id){
+
+        $user_id = Auth::id();
+        $delivery_date = request('delivery_date');
+        $isveg = request('isVeg');
         $order = Order::firstOrCreate([
             'user_id'=>$user_id,
             'ordered'=>0,
@@ -121,12 +291,14 @@ class Home extends Controller
             $orderItem->user_id=$user_id;
             $orderItem->ordered=0;
             $orderItem->cake_id=$cake_id;
+            $orderItem->delivery_date=$delivery_date;
+            $orderItem->isVeg=$isveg;
             $orderItem->qty=1;
             $orderItem->save();
         } 
         return redirect()->route('cart')->with('success','Item added successfully !!');
+
     }
-    
 
     public function remove_Cart(Request $req,$cake_id){
         $user_id = Auth::id();    
@@ -192,20 +364,44 @@ class Home extends Controller
         
     }
 
-    public function checkout(){
-        $user = Auth::id();
-        $order = Order::where(array(['ordered',0],['user_id',$user]))->first();
-        $data = [
-            'country'=>Country::all(),
-            'state'=>State::all(),
-            'district'=>District::all(),
-            'area'=>Area::all(),
-            "categories"=>Category::all(),
-            'address'=>Address::where('user_id',$user)->get(),
-            "orderitem"=>Order::find($order->id)->orderitem,
-            "coupon"=>Order::find($order->id),
-        ];
-        return view('checkout',$data);
+    public function checkout(Request $r){
+        if ($r->search == ""){
+            $user = Auth::id();
+            $order = Order::where(array(['ordered',0],['user_id',$user]))->first();
+            $data = [
+                'country'=>Country::all(),
+                'state'=>State::all(),
+                'district'=>District::all(),
+                'areas'=>Area::all(),
+                "categories"=>Category::all(),
+                'address'=>Address::where('user_id',$user)->get(),
+                "orderitem"=>Order::find($order->id)->orderitem,
+                "coupon"=>Order::find($order->id),
+                'area'=>null,
+                'delivery_charge'=> Area::where('pincode',$order->area)->first(),
+            ];
+            return view('checkout',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $user = Auth::id();
+            $order = Order::where(array(['ordered',0],['user_id',$user]))->first();
+            // $a = Order::select('area')->where('id',$order->id)->get();
+            $delivery_charge = Area::where('pincode',$a)->first();
+            $data = [
+                'country'=>Country::all(),
+                'state'=>State::all(),
+                'district'=>District::all(),
+                'areas'=>Area::all(),
+                "categories"=>Category::all(),
+                'address'=>Address::where('user_id',$user)->get(),
+                "orderitem"=>Order::find($order->id)->orderitem,
+                "coupon"=>Order::find($order->id),
+                'area'=>Area::where('pincode',$search)->first(),
+                'delivery_charge'=> Area::where('pincode',$order->area)->first(),
+            ];
+            return view('checkout',$data);
+        }
     }
 
     public function insert_address(Request $req){
@@ -234,14 +430,61 @@ class Home extends Controller
         return redirect()->back();
     }
 
-    public function order(){
+    public function order(Request $request){
         $user_id = Auth::id();
         $address_id = request('address');
+        $delivery_type = request('delivery');
         $address = Address::where('id',$address_id)->first();
         $order = Order::where(array(['ordered',0],['user_id',$user_id]))->first();
-        $order->address_id = $address->id;
-        $orderItem = Order::find($order->id)->orderitem;
+        
 
+        if($delivery_type == "Economy Delivery")
+            $delivery_charge= Area::where('pincode',$order->area)->first();
+        else
+            $delivery_charge= 00;
+
+        $order->address_id = $address->id;
+        $order->delivery_type = $delivery_type;
+        $order->delivery_charge = $delivery_charge->delivery_charge;
+        // $orderItem = Order::find($order->id)->orderitem;
+        // $order->ordered = True;
+        // $order->isPending  = 1;
+        // $orderItem->map(function ($oi){
+        //     $oi->ordered = True;
+        //     $oi->save();
+        // });
+        $order->save();
+        return redirect()->route('place_order',$order->id);
+    }
+
+    public function place_order(Request $r,$order_id){
+        if ($r->search == ""){
+            $order = Order::find($order_id);
+            $data = [
+                'order'=>$order,
+                "orderitem"=>Order::find($order->id)->orderitem,
+                'categories'=>Category::All(),
+                'area'=>null,
+            ];
+            return view('place_order',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $order = Order::find($order_id);
+            $data = [
+                'order'=>$order,
+                "orderitem"=>Order::find($order->id)->orderitem,
+                'categories'=>Category::All(),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('place_order',$data);
+        }
+    }
+
+    public function confirm(Request $r){
+        $user_id = Auth::id();
+        $order = Order::where(array(['ordered',0],['user_id',$user_id]))->first();
+        $orderItem = Order::find($order->id)->orderitem;
         $order->ordered = True;
         $order->isPending  = 1;
         $orderItem->map(function ($oi){
@@ -249,16 +492,24 @@ class Home extends Controller
             $oi->save();
         });
         $order->save();
-        return redirect()->route('confirm');
+
+        if ($r->search == ""){
+            $data = [
+                'categories'=>Category::All(),
+                'area'=>null,
+            ];
+            return view('confirm_order',$data);
+        }
+        else{
+            $search = $r->input('search');
+            $data = [
+                'categories'=>Category::All(),
+                'area'=>Area::where('pincode',$search)->first(),
+            ];
+            return view('confirm_order',$data);
+        }
     }
 
-
-    public function confirm(){
-        $data = [
-            'categories'=>Category::All(),
-        ];
-        return view('confirm_order',$data);
-    }
     // public function add_to_cart(Request $request,$cake_id){
     //     $user_id = Auth::id();
        
