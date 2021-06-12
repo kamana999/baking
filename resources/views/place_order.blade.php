@@ -16,7 +16,7 @@
                 $discountTotal += $oi->cake->discount_price * $oi->qty;
             ?>
         @endforeach
-           <div class="table-responsive text-center">
+            <div class="table-responsive text-center">
               <table class="table  table-borderless mb-0">
                 <tbody>
                   <tr>

@@ -254,4 +254,15 @@ class Vendors extends Controller
         return view('vendor.order_completed', $data); 
 
     }
+
+    public function show_orders($order_id){
+        $order = Order::find($order_id);
+        $data = [
+            'categories'=>Category::all()->count(),
+            'vendor'=>Vendor::all(),  
+            'orders'=>$order,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
+        ];
+        return view('vendor.show_orders',$data);
+    }
 }

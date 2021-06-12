@@ -297,7 +297,7 @@
                     <form action="{{route('orderDetail')}}" method="POST" >
                             @csrf
                             <div class="mb-3">
-                                <select name="address" class="form-control">
+                                <select name="address" class="form-control" required>
                                     <option value="">Select default address</option>
                                     @foreach ($address as $a)
                                     <option value="{{$a->id}}">{{$a->name}} {{ $a->contact }} | {{$a->street}},{{$a->area->name }} ({{$a->district->name}}, {{$a->state->name}})</option>
@@ -305,7 +305,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <select name="delivery" class="form-control">
+                                <select name="delivery" class="form-control" required>
                                     <option value="">Select Delivery Type</option>
                                     <option value="Standard Delivery">Standard Delivery (Free)</option>
                                     <option value="Economy Delivery">Economy Delivery charge (Rs.{{$delivery_charge->delivery_charge}}) </option>

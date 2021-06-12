@@ -28,7 +28,6 @@ class Admin extends Controller
 
         }
         // $vendor = Vendor::where('user_id',Auth::id())->firstOrFail();
-
         $data = [
             'categories'=>Category::all()->count(),
             'banners'=>Banner::all()->count(),
@@ -40,6 +39,7 @@ class Admin extends Controller
             'users'=>User::where(array(['isVendor',0],['isAdmin',0],['isStaff',0]))->count(),
             'vendor'=>Vendor::all(),  
             'orders'=>Order::where('ordered',1)->limit(20)->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin/dashboard', $data);
@@ -49,6 +49,7 @@ class Admin extends Controller
         $customize = Customize::where('ordered',1)->get();
         $data = [
             'customize'=>$customize,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.personilize_order',$data);
     }
@@ -57,6 +58,7 @@ class Admin extends Controller
         $user = User::where(array(['isAdmin',0],['isVendor',0],['isStaff',0]))->get();
         $data = [
             'users' => $user,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.user',$data);
     }
@@ -98,6 +100,7 @@ class Admin extends Controller
             'area'=>Area::all(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'users'=>User::where(array(['isVendor',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin/add_vendordetail',$data);
     }
@@ -138,6 +141,7 @@ class Admin extends Controller
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'cake'=>Cake::all(),
             'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.cake',$data);
     }
@@ -146,6 +150,7 @@ class Admin extends Controller
         $data = [
             'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
             'categories'=>Category::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
 
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             
@@ -206,7 +211,8 @@ class Admin extends Controller
             'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
             'categories'=>Category::all(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'edits'=>Cake::findOrFail($id)
+            'edits'=>Cake::findOrFail($id),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.edit_cake', $data);
     }
@@ -259,6 +265,7 @@ class Admin extends Controller
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'staffs'=>Delivery_Person::where(array(['vendor_id', Auth::id()]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.delivery_person',$data);
     }
@@ -266,6 +273,7 @@ class Admin extends Controller
     public function createstaff(Request $request){
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.add_new_deliveryPerson', $data);
     }
@@ -293,6 +301,7 @@ class Admin extends Controller
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'users'=>User::where(array(['isAdmin',0],['isVendor',0],['isStaff',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.add_deliveryPerson_details',$data);
     }
@@ -348,6 +357,7 @@ class Admin extends Controller
             'categories'=>Category::all()->count(),
             'vendor'=>Vendor::all(),  
             'orderitem'=>Order::where(array(['isPending',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.orders',$data);
@@ -359,6 +369,7 @@ class Admin extends Controller
             'categories'=>Category::all()->count(),
             // 'vendor'=>Vendor::where('id',$order->id)->first(),
             'orderitem'=>Order::where(array(['isConfirm',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.order_confirm',$data);
@@ -369,6 +380,7 @@ class Admin extends Controller
         $data = [
             'categories'=>Category::all()->count(),
             'orderitem'=>Order::where(array(['outForDelivery',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.out_for_delivery', $data);   
@@ -380,6 +392,7 @@ class Admin extends Controller
             'categories'=>Category::all()->count(),
             // 'vendor'=>Vendor::where('id',$order->vendor_id)->first(),
             'orderitem'=>Order::where(array(['orderCompleted',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.order_completed', $data);   
@@ -391,6 +404,7 @@ class Admin extends Controller
             'vendor'=>Vendor::all(),  
             
             'orderitem'=>Order::where(array(['isCancle',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.cancle_order', $data);
@@ -403,6 +417,7 @@ class Admin extends Controller
             'categories'=>Category::all()->count(),
             'order'=>$order,
             'vendors'=>$vendor,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.assign_vendor',$data);
     }
@@ -431,6 +446,7 @@ class Admin extends Controller
             'vendor'=>Vendor::all(),  
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'orderitem'=>Order::where(array(['isCancle',1],['ordered',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
         return view('admin.cancle_order', $data);
@@ -443,6 +459,7 @@ class Admin extends Controller
             'categories'=>Category::all()->count(),
             'vendor'=>Vendor::all(),  
             'orders'=>$order,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.show_orders',$data);
     }

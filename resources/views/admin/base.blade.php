@@ -594,7 +594,7 @@
 					</div>
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="https://via.placeholder.com/110x110" class="user-img" alt="user avatar">
+							<img src="{{url('upload/'.$profile->image)}}" class="user-img" alt="user avatar">
 							<div class="user-info ps-3">
                                @auth 
 								<p class="user-name mb-0">{{Auth::User()->name}}</p>

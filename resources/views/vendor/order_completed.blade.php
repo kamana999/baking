@@ -48,6 +48,11 @@
 											  <td>{{$o->vendor->user->name}} ({{$o->vendor->contact}})</td>
 											  <td>{{$o->delivery_boy->name}} ({{$o->delivery_boy->contact}})</td>
 											   <td class=""><a href=""><span class="btn btn-sm bg-light-primary text-success w-100">Order Completed</span></a></td>
+											   	<td>
+													<div class="d-flex order-actions">
+													<a href="{{route('vendor_show_orders',$o->id)}}" class=" btn btn-sm text-info bg-light-info border-0"><i class='bx bxs-show'></i></a>
+													</div>
+												</td>
 										   </tr>
 										   @endforeach
 									   </tbody>

@@ -328,8 +328,21 @@ class Home extends Controller
 
     public function removeitem($cake_id){
         $user_id = Auth::id(); 
-        $cake = OrderItem::where(['cake_id'=>$cake_id])->delete();
-        return redirect()->route('cart');
+        $cake = Cake::find($cake_id);
+        if($cake){
+            $order = Order::where([['user_id',$user_id],['ordered',false]])->first();
+            if($order){
+                $orderItem = OrderItem::where([['user_id',$user_id],['ordered',false],["cake_id",$cake->id]])->first();
+                if($orderItem){
+                    // $cake = OrderItem::where(['cake_id'=>$cake_id])->delete();
+                    $orderItem->delete();
+                }
+            }   
+            return redirect('cart')->with(['success' => 'Cake removed successfully from your cart','alert'=>'alert-danger']);
+        }
+        else {
+            return redirect()->back();   
+        }
     }
 
     public function apply_coupon(){
@@ -436,16 +449,16 @@ class Home extends Controller
         $delivery_type = request('delivery');
         $address = Address::where('id',$address_id)->first();
         $order = Order::where(array(['ordered',0],['user_id',$user_id]))->first();
-        
-
-        if($delivery_type == "Economy Delivery")
-            $delivery_charge= Area::where('pincode',$order->area)->first();
-        else
-            $delivery_charge= 00;
 
         $order->address_id = $address->id;
         $order->delivery_type = $delivery_type;
-        $order->delivery_charge = $delivery_charge->delivery_charge;
+        if($delivery_type == "Economy Delivery"){
+            $delivery_charge= Area::where('pincode',$order->area)->first();
+            $order->delivery_charge = $delivery_charge->delivery_charge;
+        }
+        elseif($delivery_type == "Standard Delivery"){
+            $order->delivery_charge = 00;
+        }
         // $orderItem = Order::find($order->id)->orderitem;
         // $order->ordered = True;
         // $order->isPending  = 1;

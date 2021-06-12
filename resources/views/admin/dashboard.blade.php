@@ -160,18 +160,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="card radius-10 border shadow-none mb-0">
-								<div class="card-body">
-                                    <div class="d-flex align-items-center">
-										<div>
-											<p class="mb-0 text-secondary">Total Vendors</p>
-											<h4 class="mb-0">55</h4>
-										</div>
-										<div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-user-account' ></i>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				 </div>

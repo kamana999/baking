@@ -116,6 +116,7 @@ Route::prefix('vendor')->group(function(){
     Route::post('/submitstaffs',[\App\Http\Controllers\Vendors::class, "submitstaff"])->name('submitstaff');
     Route::get('/submitform',[\App\Http\Controllers\Vendors::class, "submitform"])->name('submitform');
     Route::post('/submitdetails',[\App\Http\Controllers\Vendors::class, "submitdetails"])->name('submitdetails');
+    Route::get('/vendor_show_orders/{id}',[Vendors::class,'show_orders'])->name('vendor_show_orders');
     
 
 // orders

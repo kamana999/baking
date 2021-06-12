@@ -306,9 +306,12 @@
     @endif
         <h1>Shopping Cart</h1>
         <br><br>
+        <div class="row mb-3">
+            <h6 class="lead font-weight-bold">{{ count($orderitem)}} Cakes in your cart</h6>
+        </div>
         <div class="shopping-cart">
             @if (count($orderitem)>0)
-                <?php 
+            <?php 
                     $total = 0;
                     $discountTotal = 0;
                 ?>
@@ -321,11 +324,13 @@
                 <label class="product-removal">Remove</label>
                 <label class="product-line-price">Total</label>
             </div>
-                @foreach($orderitem as $oi)
+            @foreach($orderitem as $oi)
                     <?php 
                         $total += $oi->cake->price * $oi->qty;
                         $discountTotal += $oi->cake->discount_price * $oi->qty;
                     ?>
+            @endforeach
+            @foreach($orderitem as $oi)
                     <div class="product">
                         <div class="product-image">
                             <img src="{{ asset('upload/'.$oi->cake->image)}}">
@@ -353,15 +358,18 @@
                         </div>
                         <div class="product-line-price"> 
                             @if($oi->cake->discount_price)
-                                <span class="d-block m-0 text-danger h5">{{$discountTotal = $oi->qty*$oi->cake->discount_price}}</span>
-                                <span class="d-block m-0 text-muted small"><del>{{$total = $oi->qty*$oi->cake->price}}</del></span>
+                                <span class="d-block m-0 text-danger h5">{{$discount_price = $oi->qty*$oi->cake->discount_price}}</span>
+                                <span class="d-block m-0 text-muted small"><del>{{$total_price = $oi->qty*$oi->cake->price}}</del></span>
                             @else
-                            <span class="d-block m-0 text-danger h5">{{$total = $oi->qty*$oi->cake->price}}</span>
+                            <span class="d-block m-0 text-danger h5">{{$total_price = $oi->qty*$oi->cake->price}}</span>
                             @endif
                         </div>
                     </div>
-                
+                    
+            @endforeach
+            <h2><a href="{{route('home')}}" class="btn mb-5 mx-auto"style="background-color: #8ea47e; color: white;"> Continue Shopping</a></h2>
 
+            @if (count($orderitem)>0)
                 <div class="totals">
                         <div class="totals-item">
                             <label>Subtotal</label>
@@ -435,8 +443,12 @@
                         </div>
                     <a href="{{route('checkout')}}"><button class="checkout">Checkout</button></a>
                 </div>
-                @endforeach
-                </div>
+            @else
+
+                <h2>Your Cart is  Empty</h3>
+                <h2><a href="{{route('home')}}" class="btn mb-5 mx-auto"style="background-color: #8ea47e; color: white;"> Continue Shopping</a>
+            @endif
+        </div>
                 
                 
 
