@@ -19,6 +19,7 @@ class DeliveryPersonController extends Controller
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'staffs'=>Delivery_Person::where(array(['vendor_id', Auth::id()]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.delivery_person', $data);
     }
@@ -54,6 +55,7 @@ class DeliveryPersonController extends Controller
     {
         $data = [
             'delivery'=>$delivery,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.show_delivery',$data);
@@ -70,6 +72,7 @@ class DeliveryPersonController extends Controller
         $data = [
             'edits'=>$delivery,
             'users'=>User::where(array(['isAdmin',0],['isVendor',0],['isStaff',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.edit_delivery',$data);

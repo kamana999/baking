@@ -95,7 +95,7 @@
                                         $coupons = $total*$orders->coupon->value/100;
                                     ?>
                                     @else
-                                    <?php $coupon = $orders->coupon->value;?>
+                                    <?php $coupons = $orders->coupon->value;?>
                                     @endif
 
                             <tr>
@@ -112,7 +112,7 @@
                                 @else
                                     <tr>
                                         <th><strong>Coupon Value-</strong></th>
-                                        <td class="totals-value" id="cart-shipping">{{$orders->coupon->value}}</td>
+                                        <td class="totals-value" id="cart-shipping">{{$coupons}}</td>
                                     </tr>
                                 @endif
                                 </td>
@@ -122,9 +122,9 @@
                                 <th>Grand Total</th>
                                 <td>
                                 @if($oi->cake->discount_price)
-                                <div class="totals-value text-danger" id="cart-total"><strong>Rs {{$grandTotal = $tax + $discountTotal-$coupons+$orders->delivery_charge}} /-</strong></div>
+                                <div class="totals-value text-danger" id="cart-total"><strong>Rs. {{$grandTotal = $tax + $discountTotal-$coupons+$order->delivery_charge}}</strong></div>
                                 @else
-                                <div class="totals-value text-danger" id="cart-total"><strong>Rs {{$grandTotal = $tax + $total-$coupons + $orders->delivery_charge}} /-</strong></div>
+                                <div class="totals-value text-danger" id="cart-total"><strong>Rs. {{$grandTotal = $tax + $total-$coupons + $order->delivery_charge}}</strong></div>
                                 @endif
                                 </td>
                             </tr>

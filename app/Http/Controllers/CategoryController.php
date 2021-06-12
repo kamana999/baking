@@ -18,6 +18,7 @@ class CategoryController extends Controller
         $data = [
             'categories'=>Category::all(),
             'category'=>Category::with('children')->whereNull('parent_id')->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.category', $data);
@@ -32,6 +33,7 @@ class CategoryController extends Controller
     {
         $data = [
             'categories'=>Category::with('children')->whereNull('parent_id')->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin/add_category',$data);
@@ -89,6 +91,7 @@ class CategoryController extends Controller
             'edits'=>$category,
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'categories'=>Category::with('children')->whereNull('parent_id')->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view("admin.catedit", $data);
     }

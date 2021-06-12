@@ -41,6 +41,7 @@ class Vendors extends Controller
             'delivery'=>$delivery,
             'order'=>$order,
             'delivery_person'=>$delivery_person,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             
         ];
         return view('vendor.vendor',$data);
@@ -50,7 +51,7 @@ class Vendors extends Controller
         $user_id = Auth::id();
         $user = Vendor::where(array(['user_id',$user_id]))->first();
         $data = [
-            'profile'=>$user,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.profile',$data);
 
@@ -108,6 +109,7 @@ class Vendors extends Controller
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'staffs'=>Delivery_Person::where(array(['vendor_id', $vendor->id]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.delivery_person',$data);
     }
@@ -115,6 +117,7 @@ class Vendors extends Controller
     public function createstaff(Request $request){
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.add_new_deliveryPerson', $data);
     }
@@ -142,6 +145,7 @@ class Vendors extends Controller
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'users'=>User::where(array(['isAdmin',0],['isVendor',0],['isStaff',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.add_deliveryPerson_details',$data);
     }
@@ -194,6 +198,7 @@ class Vendors extends Controller
         $order = Order::where(array(['isConfirm',1],['ordered',1],['vendor_id',$vendor]))->get();
         $data = [
             'categories'=>Category::all()->count(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             'orderitem'=>Order::where(array(['vendor_id',$vendor],['isConfirm',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
@@ -212,6 +217,7 @@ class Vendors extends Controller
             'vendor'=>Vendor::all(),  
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'order'=>$order,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
 
         ];
         return view('vendor.assign_delivery',$data);
@@ -236,6 +242,7 @@ class Vendors extends Controller
         $order = Order::where(array(['vendor_id',$vendor->id],['outForDelivery',1],['ordered',1]))->get();
         $data = [
             'categories'=>Category::all()->count(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             'orderitem'=>Order::where(array(['vendor_id',$vendor->id],['outForDelivery',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];
@@ -248,6 +255,7 @@ class Vendors extends Controller
         $order = Order::where(array(['vendor_id',$vendor->id],['orderCompleted',1],['ordered',1]))->get();
         $data = [
             'categories'=>Category::all()->count(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             'orderitem'=>Order::where(array(['vendor_id',$vendor->id],['orderCompleted',1],['ordered',1]))->get(),
             // 'order'=>Order::find($order->id)->orderitem,
         ];

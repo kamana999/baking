@@ -79,17 +79,7 @@
 						</li>
 					</ul>
 				</li>
-				<li>
-					<a class="has-arrow" href="javascript:;">
-						<div class="parent-icon"> <i class="bx bx-donate-blood"></i>
-						</div>
-						<div class="menu-title">Users</div>
-					</a>
-					<ul>
-						<li> <a href="ecommerce-products-details.html"><i class="bx bx-right-arrow-alt"></i>User Details</a>
-						</li>
-					</ul>
-				</li>		
+						
 				<li class="menu-label">Pages</li>
 				<li>
 					<a href="{{route('vendor_profile')}}">
@@ -98,29 +88,7 @@
 						<div class="menu-title">Profile</div>
 					</a>
 				</li>
-				<li>
-					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-category"></i>
-						</div>
-						<div class="menu-title">Application</div>
-					</a>
-					<ul>
-						<li> <a href="app-emailbox.html"><i class="bx bx-right-arrow-alt"></i>Email</a>
-						</li>
-						<li> <a href="app-chat-box.html"><i class="bx bx-right-arrow-alt"></i>Chat Box</a>
-						</li>
-						<li> <a href="app-file-manager.html"><i class="bx bx-right-arrow-alt"></i>File Manager</a>
-						</li>
-						<li> <a href="app-contact-list.html"><i class="bx bx-right-arrow-alt"></i>Contatcs</a>
-						</li>
-						<li> <a href="app-to-do.html"><i class="bx bx-right-arrow-alt"></i>Todo List</a>
-						</li>
-						<li> <a href="app-invoice.html"><i class="bx bx-right-arrow-alt"></i>Invoice</a>
-						</li>
-						<li> <a href="app-fullcalender.html"><i class="bx bx-right-arrow-alt"></i>Calendar</a>
-						</li>
-					</ul>
-				</li>
+				
 			</ul>
 			<!--end navigation-->
 		</div>
@@ -136,6 +104,7 @@
 							<span class="position-absolute top-50 search-close translate-middle-y"><i class='bx bx-x'></i></span>
 						</div>
 					</div>
+					
 					<div class="top-menu ms-auto">
 						<ul class="navbar-nav align-items-center">
 							<li class="nav-item mobile-search-icon">
@@ -143,18 +112,10 @@
 								</a>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">	<i class='bx bx-category'></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<div class="row row-cols-3 g-3 p-3">
-										
-									</div>
-								</div>
+								
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">7</span>
-									<i class='bx bx-bell'></i>
-								</a>
+								
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="javascript:;">
 										
@@ -244,9 +205,7 @@
 								</div>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
-									<i class='bx bx-comment'></i>
-								</a>
+								
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="javascript:;">
 									
@@ -262,9 +221,10 @@
 							</li>
 						</ul>
 					</div>
+
 					<div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="https://via.placeholder.com/110x110" class="user-img" alt="user avatar">
+							<img src="{{url('upload/'.$profile->image)}}" class="user-img" alt="user avatar">
 							<div class="user-info ps-3">
                                @auth 
 								<p class="user-name mb-0">{{Auth::User()->name}}</p>

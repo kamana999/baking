@@ -20,6 +20,7 @@ class CakeController extends Controller
         $data = [
             'categories'=>Category::all(),
             'cakes'=>Cake::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.cake',$data);
     }
@@ -95,6 +96,7 @@ class CakeController extends Controller
         $data= [
             'edits'=>$cake,
             'categories'=>Category::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.edit_cake', $data);
     }

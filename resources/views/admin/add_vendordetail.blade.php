@@ -33,7 +33,9 @@
                                 <div class="mb-3">
                                     <label for="">User_Id<span class="text-danger"> * </span></label>
                                     <select name="user_id" id="" class="form-control">
+                                        <option value="">Select Vendor</option>
                                         @foreach ($users as $c)
+                                            
                                             <option value="{{$c->id}}">{{$c->name}}</option>
                                         @endforeach
                                     </select>

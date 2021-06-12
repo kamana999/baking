@@ -16,6 +16,7 @@ class Cakes extends Controller
         $data = [
             'categories'=>Category::all(),
             'cakes'=>Cake::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             
         ];
         return view('vendor.cake',$data);
@@ -24,6 +25,7 @@ class Cakes extends Controller
     public function create(Request $request){
         $data = [
             'categories'=>Category::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('vendor.create', $data);
     }

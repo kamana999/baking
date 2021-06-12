@@ -20,6 +20,7 @@ class StateController extends Controller
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'countries' => Country::all(),
             'states' => State::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.state',$data);
     }
@@ -35,6 +36,7 @@ class StateController extends Controller
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'countries' => Country::all(),
             'states' => State::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.add_state',$data);
     }
@@ -81,6 +83,7 @@ class StateController extends Controller
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'countries' => Country::all(),
             'states' => State::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.edit_state',$data);
     }

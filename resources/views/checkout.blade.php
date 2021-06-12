@@ -420,7 +420,7 @@
                                 $coupons = $total*$coupon->coupon->value/100;
                             ?>
                             @else
-                            <?php $coupon = $coupon->coupon->value;?>
+                            <?php $coupons = $coupon->coupon->value;?>
                             @endif
                             <div class="totals-item">
                                 
@@ -430,7 +430,8 @@
                                     <label><strong>Coupon Ammount-</strong></label>
                                     <div class="totals-value" id="cart-shipping">{{$coupons}}</div>
                                 @else
-                                    <div class="totals-value" id="cart-shipping">{{$coupon->coupon->value}}</div>
+                                    <label><strong>Coupon Ammount-</strong></label>
+                                    <div class="totals-value" id="cart-shipping">{{$coupons}}</div>
                                 @endif
                                 
                             </div>

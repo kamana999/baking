@@ -18,6 +18,7 @@ class BannerController extends Controller
         $data = 
         [
             'banners' => Banner::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.banner', $data);
@@ -31,6 +32,7 @@ class BannerController extends Controller
     public function create()
     {
         $data = [
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.add_banner',$data);
@@ -86,6 +88,7 @@ class BannerController extends Controller
         $data= [
             'edits'=>$banner,
             'banners'=>Banner::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.editbanner', $data);

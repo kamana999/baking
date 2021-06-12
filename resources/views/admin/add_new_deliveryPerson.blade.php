@@ -30,20 +30,24 @@
                             <form action="{{route('submitDeliveryBoy')}}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="form-label">Name</label>
+                                    <label class="form-label">Name<span class="text-danger"> * </span></label>
                                     <input type="text" name="name" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Email</label>
+                                    <label class="form-label">Email<span class="text-danger"> * </span></label>
                                     <input type="text" name="email" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label class="form-label">Password <span class="text-danger"> * </span></label>
                                     <input type="text" name="password" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="">IsStaff</label>
-                                    <input type="integer" name="isStaff" class="form-control">
+                                    <label for="">isStaff<span class="text-danger"> * </span></label>
+                                    <select name="isStaff" id="" class="form-control">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    
                                 </div>
                                 <div class="col-12 mt-2">
                                 <div class="d-grid">

@@ -42,8 +42,12 @@
                                     <input type="text" name="password" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="">IsStaff</label>
-                                    <input type="integer" name="isStaff" class="form-control">
+                                    <label for="">isStaff<span class="text-danger"> * </span></label>
+                                    <select name="isStaff" id="" class="form-control">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    
                                 </div>
                                 <div class="col-12 mt-2">
                                 <div class="d-grid">

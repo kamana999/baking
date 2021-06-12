@@ -37,6 +37,7 @@
 											   <th>Name</th>
 											   <th>Email</th>
 											   <th>Contact</th>
+											   <th>Status</th>
 											   <th>Address</th>
 											   <th>Image</th>
 											   <th>Actions</th>
@@ -54,7 +55,8 @@
 												</div>
 											   </td>
 											   <td>{{$staff->user->email}}</td>
-											   <td class=""><span class="badge bg-light-success text-success w-100">{{$staff->contact}}</span></td>
+											   <td class="">{{$staff->contact}}</td>
+											   <td class=""><span class="badge bg-light-success text-success w-100">{{$staff->status}}</span></td>
 											   <td class="">{{$staff->address}}</span></td>
 											   <td><img src="{{url('upload/',$staff->image)}}" height="80" width="100" alt=""></td>
 											   <td>

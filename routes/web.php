@@ -90,6 +90,7 @@ Route::prefix('admin')->group(function(){
 
     Route::resource('staffs', DeliveryPersonController::class)->except(['show'])->middleware('auth');
     Route::resource('categories', CategoryController::class)->except(['show'])->middleware('auth');
+    Route::resource('cake', CakeController::class)->except(['show'])->middleware('auth');
     Route::resource('coupons', CouponController::class)->middleware('auth');
     Route::resource('countries', CountryController::class)->middleware('auth');
     Route::resource('states', StateController::class)->middleware('auth');
@@ -109,7 +110,8 @@ Route::prefix('vendor')->group(function(){
     // Route::get('/cakes/{id}',[\App\Http\Controllers\Cakes::class, "index"])->name('cake');
     // Route::get('/create/{id}',[\App\Http\Controllers\Cakes::class, "create"])->name('create');
     // Route::post('/submit/{id}',[\App\Http\Controllers\Cakes::class, "store"])->name('submit');
-//delivery boy
+
+    //delivery boy
     Route::resource('delivery-boy', VendorDelivery::class)->middleware('auth');
     Route::get('/staffs',[\App\Http\Controllers\Vendors::class, "staff"])->name('staff');
     Route::get('/createstaffs',[\App\Http\Controllers\Vendors::class, "createstaff"])->name('createstaff');
@@ -119,7 +121,7 @@ Route::prefix('vendor')->group(function(){
     Route::get('/vendor_show_orders/{id}',[Vendors::class,'show_orders'])->name('vendor_show_orders');
     
 
-// orders
+    // orders
 
     Route::get('/orders',[Vendors::class,'order'])->name('vendor_order');
     Route::get('/assign-delivery/{id}',[Vendors::class,'assign_delivery_boy'])->name('assign_delivery_boy');

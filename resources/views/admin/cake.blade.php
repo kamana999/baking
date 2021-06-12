@@ -32,8 +32,12 @@
 							<img src="{{url('upload/'.$cat->image)}}" class="card-img-top" alt="..." height="250">
 							<div class="card-body">
 								<h6 class="card-title cursor-pointer">{{$cat->title}}</h6>
-                                <h6 class="card-title cursor-pointer text-danger">{{$cat->discount_price}}</h6>
-								<h6 class="card-title cursor-pointer"><del>{{$cat->price}}</del></h6>
+								<h6> ({{$cat->weight}} {{$cat->weight_type}})</h6>
+								@if($cat->discount_price)
+                                <h6 class="card-title cursor-pointer text-danger">Rs. {{$cat->discount_price}} <span class="text-muted"><del>{{$cat->price}}</del></span></h6>
+								@else
+								<h6 class="card-title cursor-pointer text-danger">Rs. {{$cat->price}}</h6>
+								@endif
 								
 								<div class="clearfix">
                                     <form  class="d-inline" action="{{route('cake.destroy',['cake'=>$cat->id])}}" method="POST">

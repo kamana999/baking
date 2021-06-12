@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6 mx-auto">
-        <h3 class=" text-center mt-5"><strong>Order Details</strong></h3>
+        <h3 class="  mt-5"><strong>Order Details</strong></h3>
         <?php 
             $total = 0;
             $discountTotal = 0;
@@ -16,7 +16,7 @@
                 $discountTotal += $oi->cake->discount_price * $oi->qty;
             ?>
         @endforeach
-            <div class="table-responsive text-center">
+            <div class="table-responsive">
               <table class="table  table-borderless mb-0">
                 <tbody>
                   <tr>
@@ -39,9 +39,9 @@
                   <tr>
                     <th>GST (18)%</th>
                     <td>@if($oi->cake->discount_price)
-                            <div class="totals-value" id="cart-tax">{{$tax = $discountTotal*18/100}}</div>
+                            <div class="totals-value" id="cart-tax">Rs{{$tax = $discountTotal*18/100}}</div>
                             @else
-                            <div class="totals-value" id="cart-tax">{{$tax = $total*18/100}}</div>
+                            <div class="totals-value" id="cart-tax">Rs{{$tax = $total*18/100}}</div>
                             @endif</td>
                   </tr>
                   <tr>
@@ -57,7 +57,7 @@
                             $coupons = $total*$order->coupon->value/100;
                         ?>
                         @else
-                        <?php $coupon = $order->coupon->value;?>
+                        <?php $coupons = $order->coupon->value;?>
                         @endif
 
                   <tr>
@@ -69,12 +69,12 @@
                             <td class="totals-value" id="cart-shipping">{{$order->coupon->value}}%</td></tr>
                         <tr>
                             <th><strong>Coupon Ammount-</strong></th>
-                            <td class="totals-value" id="cart-shipping">{{$coupons}}</td>
+                            <td class="totals-value" id="cart-shipping">Rs{{$coupons}}</td>
                         </tr>
                     @else
                         <tr>
                             <th><strong>Coupon Value-</strong></th>
-                            <td class="totals-value" id="cart-shipping">{{$order->coupon->value}}</td>
+                            <td class="totals-value" id="cart-shipping">Rs {{$coupons}}</td>
                         </tr>
                     @endif
                     </td>
@@ -83,9 +83,9 @@
                     <th>Grand Total</th>
                     <td>
                     @if($oi->cake->discount_price)
-                    <div class="totals-value text-danger" id="cart-total"><strong>{{$grandTotal = $tax + $discountTotal-$coupons+$order->delivery_charge}}</strong></div>
+                    <div class="totals-value text-danger" id="cart-total"><strong>Rs. {{$grandTotal = $tax + $discountTotal-$coupons+$order->delivery_charge}}</strong></div>
                     @else
-                    <div class="totals-value text-danger" id="cart-total"><strong>{{$grandTotal = $tax + $total-$coupons + $order->delivery_charge}}</strong></div>
+                    <div class="totals-value text-danger" id="cart-total"><strong>Rs. {{$grandTotal = $tax + $total-$coupons + $order->delivery_charge}}</strong></div>
                     @endif
                     </td>
                   </tr>
@@ -96,9 +96,9 @@
                             <th>Grand Total</th>
                             <td>
                             @if($oi->cake->discount_price)
-                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $discountTotal+$order->delivery_charge}}</div>
+                                <div class="totals-value" id="cart-total">Rs. {{$grandTotal = $tax + $discountTotal+$order->delivery_charge}}</div>
                                 @else
-                                <div class="totals-value" id="cart-total">{{$grandTotal = $tax + $total+$order->delivery_charge}}</div>
+                                <div class="totals-value" id="cart-total">Rs. {{$grandTotal = $tax + $total+$order->delivery_charge}}</div>
                                 @endif
                             </td>
                         </tr>

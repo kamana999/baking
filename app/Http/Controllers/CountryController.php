@@ -18,6 +18,7 @@ class CountryController extends Controller
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'countries' => Country::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.country', $data);
     }
@@ -30,6 +31,7 @@ class CountryController extends Controller
     public function create()
     {
         $data = [
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.add_country', $data);
@@ -74,6 +76,7 @@ class CountryController extends Controller
     {
         $data = [
             'edits'=>$country,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.edit_country', $data);

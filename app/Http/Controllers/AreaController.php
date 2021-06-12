@@ -20,6 +20,7 @@ class AreaController extends Controller
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'districts' => District::all(),
             'areas' => Area::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.area',$data);
     }
@@ -34,6 +35,7 @@ class AreaController extends Controller
         $data = [
             'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'districts' => District::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.add_area',$data);
     }
@@ -94,6 +96,7 @@ class AreaController extends Controller
             'edits'=>$area,
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'districts' => District::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.edit_area',$data);
     }

@@ -139,8 +139,8 @@ class Admin extends Controller
         $data = [
             'categories'=>Category::all(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'cake'=>Cake::all(),
-            'cakes'=>Cake::with('children')->whereNull('parent_id')->get(),
+            'cakes'=>Cake::all(),
+            'cake'=>Cake::with('children')->whereNull('parent_id')->get(),
             'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.cake',$data);
@@ -261,10 +261,11 @@ class Admin extends Controller
 
 
     public function staff(Request $request){
-
+        $user = Auth::id();
+        $vendor = Vendor::where('user_id',$user)->firstOrFail();
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
-            'staffs'=>Delivery_Person::where(array(['vendor_id', Auth::id()]))->get(),
+            'staffs'=>Delivery_Person::where(array(['vendor_id', $vendor->id]))->get(),
             'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.delivery_person',$data);

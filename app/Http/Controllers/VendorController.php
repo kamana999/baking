@@ -26,6 +26,7 @@ class VendorController extends Controller
             'district'=> District::all(),
             'area'=> Area::all(),
             'vendors'=>Vendor::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.vendor', $data);
@@ -39,6 +40,7 @@ class VendorController extends Controller
     public function create()
     {
         $data = [
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.vendordetails', $data);
@@ -65,6 +67,7 @@ class VendorController extends Controller
     {
         $data = [
             'vendors'=>$vendor,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.showvendors',$data);
@@ -85,6 +88,7 @@ class VendorController extends Controller
             'district'=>District::all(),
             'area'=>Area::all(),
             'users'=>User::where(array(['isAdmin',0],['isVendor',1]))->get(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.edit_vendordetails',$data);

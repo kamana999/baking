@@ -20,6 +20,7 @@ class DistrictController extends Controller
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'states' => State::all(),
             'districts' => District::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.district',$data);
     }
@@ -34,6 +35,7 @@ class DistrictController extends Controller
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'states' => State::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.add_district',$data);
         
@@ -80,6 +82,7 @@ class DistrictController extends Controller
             'edits'=>$district,
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'states' => State::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.edit_district',$data);
     }

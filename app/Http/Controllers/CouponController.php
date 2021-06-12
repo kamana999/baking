@@ -19,6 +19,7 @@ class CouponController extends Controller
         $data = [
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
             'coupons' => Coupon::all(),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
         ];
         return view('admin.coupon', $data);
     }
@@ -31,6 +32,7 @@ class CouponController extends Controller
     public function create()
     {
         $data = [
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.add_coupon',$data);
@@ -80,6 +82,7 @@ class CouponController extends Controller
     {
         $data = [
             'edits'=>$coupon,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.edit_coupon',$data);
