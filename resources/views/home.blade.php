@@ -8,17 +8,17 @@
     </ol>
     <div class="carousel-inner">
         @foreach($banners as $key => $slider)
-        <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
-            <img style="width: 100%; height: 450px;" width="10px"src="{{url('upload/'.$slider->image)}}" class="d-block w-100" alt="..."> 
-            <div class="carousel-caption">
-                    <h2 style="color:green">{{$slider->title}}</h2>
-                    <p style="color: green;">{{$slider->description}}</p>
-                    <a href="{{route('shop_cakes')}}" class="btn"
-                        style="background-color: green; color: white; padding-left: 20px; padding-right: 20px">SHOP
-                        NOW <i class="fas fa-chevron-right"></i>
-                    </a>
-                </div>
-        </div>
+            <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
+                <img style="width: 100%; height: 450px;" width="10px"src="{{url('upload/'.$slider->image)}}" class="d-block w-100 img-fluid" alt="..."> 
+                <div class="carousel-caption">
+                        <h3 style="color:green">{{$slider->title}}</h2>
+                        <p style="color: green;">{{$slider->description}}</p>
+                        <a href="{{route('shop_cakes')}}" class="btn"
+                            style="background-color: green; color: white; padding-left: 20px; padding-right: 20px">SHOP
+                            NOW <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+            </div>
         @endforeach
     </div>
     <a class="carousel-control-prev" href="#myCarousel" role="button"  data-slide="prev">
@@ -117,7 +117,7 @@
 
             </div>
                 @foreach($categories as $c)
-                     <div class="col-lg col-md-6 col-sm-12 col-12">
+                     <div class="col">
                          <a href="{{route('category',$c->id)}}" class="text-decoration-none">
                               <img src="{{url('upload/'.$c->image)}}" alt="Responsive image "class="img-fluid z-depth-1 rounded-circle mt-4 mb-3 me-5" style=" height:120px; width: 120px;cursor: pointer">
                                 <p class="text-dark text-justify text-center font-weight-bold">{{$c->cat_title }}</p>
@@ -144,12 +144,11 @@
             <div class="col-lg-12">
                 <div class="row">
                     @foreach($categories as $c)
-                        <div class="col-lg-3 view overlay zoom bg-transparent">
+                        <div class="col-6 col-lg-3 view overlay zoom bg-transparent">
                             <a href="{{route('category',$c->id)}}" class="text-decoration-none">
                                 <img src="{{url('upload/'.$c->image)}}" alt="Responsive image " class="img-fluid z-depth-1 rounded mb-3" style="height: 40vh; width: 40vw; cursor: pointer">
-                                <p class="h5 text-muted text-center font-weight-bold text-justify" style="font-weight:25px">{{$c->cat_title }}</p>
-            
-                                </a>
+                                <p class="h6 text-muted text-center font-weight-bold text-justify" style="font-weight:25px">{{$c->cat_title }}</p>
+                            </a>
                         </div>
                     @endforeach
 

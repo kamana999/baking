@@ -29,6 +29,7 @@ class Admin extends Controller
         }
         // $vendor = Vendor::where('user_id',Auth::id())->firstOrFail();
         $data = [
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
             'categories'=>Category::all()->count(),
             'banners'=>Banner::all()->count(),
             // 'cakes'=>Cake::where(array(['vendor_id', $vendor->id]))->count(),
@@ -39,7 +40,7 @@ class Admin extends Controller
             'users'=>User::where(array(['isVendor',0],['isAdmin',0],['isStaff',0]))->count(),
             'vendor'=>Vendor::all(),  
             'orders'=>Order::where('ordered',1)->limit(20)->get(),
-            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
+           
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin/dashboard', $data);

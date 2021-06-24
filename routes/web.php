@@ -17,8 +17,9 @@ use App\Http\Controllers\Vendors;
 use App\Http\Controllers\VendorDelivery;
 use App\Http\Controllers\Coupons;
 use App\Http\Controllers\CoustomizeController;
-
 use App\Http\Controllers\Admin;
+
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,13 @@ use App\Http\Controllers\Admin;
 */
 
 Route::get('/',[Home::class, "index"])->name('home');
+
 Route::get('/new_login',[Home::class, "login"])->name('new_login');
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
 Route::post('/customize',[CoustomizeController::class,"index"])->name('customize');
 Route::get('/search', [Home::class, 'search']);
 Route::get('/aboutus', [Home::class,"aboutus"])->name('aboutus');
