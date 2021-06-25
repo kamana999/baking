@@ -21,6 +21,16 @@
 
                 <div class="card">
 				  <div class="card-body p-4">
+                  <h5 class="card-title">Edit Meta Tags</h5><hr/>
+                        <div class="mb-3">
+                            <label>Keywords</label>
+                            <input name="meta_keywords" class="form-control" value="{{$edits->meta_keywords}}">
+                        </div>
+                        <div class="mb-3">
+                            <label>Description</label>
+                            <input name="meta_description" class="form-control" value="{{$edits->meta_description}}">
+                        </div>
+                    
 					  <h5 class="card-title">Edit Cake</h5>
 					  <hr/>
                         <div class="form-body mt-4">
@@ -120,10 +130,12 @@
                                     <label class="form-label">Cake Thumbnails</label>
                                   
 
-                                    <?php foreach (json_decode($edits->images)as $picture) { ?>
+                                   @if($edits->images)
+                                   <?php foreach (json_decode($edits->images)as $picture) { ?>
                                     <img src="{{ asset('/upload/'.$picture) }}" style="height:60px; width:70px"/>
                                     <?php } ?>
 
+                                   @endif
                                     <input type="file" name="images[]" class="form-control" multiple>
                                 </div>
                                 <div class="col-12 mt-2">

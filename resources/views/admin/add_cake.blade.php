@@ -21,14 +21,27 @@
 
               <div class="card">
 				  <div class="card-body p-4">
-					  <h5 class="card-title">Add New Cake</h5>
-					  <hr/>
+                    
+
+					  
                         <div class="form-body mt-4">
                             <div class="row">
                             <div class="col-lg-12">
                             <div class="border border-3 p-4 rounded">
                             <form action="{{route('cakesubmit')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
+
+                                <h5 class="card-title">Add Meta Tags</h5><hr/>
+                                <div class="mb-3">
+                                    <label>Keywords</label>
+                                    <input name="meta_keywords" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Description</label>
+                                    <input name="meta_description" class="form-control">
+                                </div>
+                                <h5 class="card-title">Add New Cake</h5>
+					            <hr/>
                                 <div class="mb-3">
                                     <select class="form-control" name="parent_id">
                                         <option value="">Select Parent Cake</option>

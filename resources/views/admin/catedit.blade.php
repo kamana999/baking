@@ -36,6 +36,16 @@
                             <img src="{{url('upload/'.$edits->image)}}" height="80" width="80" alt="">
                             <input type="file" name="image" class="form-control">
                         </div>
+                        <h5 class="card-title">Edit Meta Tags</h5><hr/>
+                        <div class="mb-3">
+                            <label>Keywords</label>
+                            <input name="meta_keywords" class="form-control" value="{{$edits->meta_keywords}}">
+                        </div>
+                        <div class="mb-3">
+                            <label>Description</label>
+                            <input name="meta_description" class="form-control" value="{{$edits->meta_description}}">
+                        </div>
+
                         <div class="col-12 mt-2">
                         <div class="d-grid">
                             <input type="submit" class="btn btn-primary w-100">    

@@ -76,6 +76,8 @@ Route::prefix('admin')->group(function(){
     Route::post('/cakesubmit',[\App\Http\Controllers\Admin::class, "store"])->name('cakesubmit');
     Route::get('/editcake/{id}',[\App\Http\Controllers\Admin::class, "editcake"])->name('editcake');
     Route::put('/updatecake/{id}',[\App\Http\Controllers\Admin::class, "updatecake"])->name('updatecake');
+    Route::get('/resetpassword/{id}',[\App\Http\Controllers\Admin::class, "editPassword"])->name('editpassword');
+    Route::put('/updatepassword/{id}',[\App\Http\Controllers\Admin::class, "updatePassword"])->name('updatepassword');
     // delivery boy
     Route::get('/delivery_boy',[\App\Http\Controllers\Admin::class, "staff"])->name('delivery_boy');
     Route::get('/createDeliveryBoy',[\App\Http\Controllers\Admin::class, "createstaff"])->name('createDeliveryBoy');
@@ -96,8 +98,8 @@ Route::prefix('admin')->group(function(){
 
 
     Route::resource('staffs', DeliveryPersonController::class)->except(['show'])->middleware('auth');
-    Route::resource('categories', CategoryController::class)->except(['show'])->middleware('auth');
-    Route::resource('cake', CakeController::class)->except(['show'])->middleware('auth');
+    Route::resource('categories', CategoryController::class)->middleware('auth');
+    Route::resource('cake', CakeController::class)->middleware('auth');
     Route::resource('coupons', CouponController::class)->middleware('auth');
     Route::resource('countries', CountryController::class)->middleware('auth');
     Route::resource('states', StateController::class)->middleware('auth');

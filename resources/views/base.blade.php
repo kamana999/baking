@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Gifts </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@yield('title','Atirum Cakes')</title>
+    <meta name="keywords" content="@yield('meta_keywords','Atirum Cakes')">
+    <meta name="description" content="@yield('meta_description','A complete online cake website')">
+    <link rel="canonical" href="{{url()->current()}}"/>
 
+    <link rel="icon" href="{{asset('Images/Index/Atrium logo (1)-01.png')}}"type="image/png" />
     
     <link rel="stylesheet" href="{{url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{url('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')}}">
@@ -306,8 +310,10 @@
     <div class="footer">
         <div class="inner-footer">
             <div class="footer-items">
-                <h2>Company Name</h2>
-                <p>Description of any product or motto of the company.</p>
+            <img src="{{asset('Images/Index/Atrium logo (1)-01.png')}}" class = "ms-3" alt="" style = "height:100px; width:100px">
+           
+                <h3>The Atrium</h3>
+                <p>A complete online cake website</p>
             </div>
 
             <div class="footer-items">

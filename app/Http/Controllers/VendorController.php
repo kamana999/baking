@@ -8,6 +8,7 @@ use App\Models\State;
 use App\Models\District;
 use App\Models\Area;
 use App\Models\Vendor;
+use App\Models\Order;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -68,6 +69,7 @@ class VendorController extends Controller
         $data = [
             'vendors'=>$vendor,
             'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
+            'order' => Order::where('vendor_id',$vendor)->get(),
             // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
         ];
         return view('admin.showvendors',$data);

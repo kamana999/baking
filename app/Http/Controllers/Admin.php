@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Banner;
@@ -165,6 +166,8 @@ class Admin extends Controller
             'price'=>'required',
             'description'=>'required',
             'image'=>'required',
+            'meta_keywords' => 'sometimes|nullable',
+            'meta_description' => 'sometimes|nullable',
         ]);
         // $image = $request->file('images');
         // if($request->hasFile('images')){
@@ -175,17 +178,23 @@ class Admin extends Controller
         //     }
         //     // $images = implode(',',$files);
         // }
+        
+        $filename1 = time(). "." . $request->image->extension();
+        $request->image->move(public_path("upload"), $filename1);
+
+        $cake = new Cake();
         if($request->hasFile('images')){
             foreach($request->file('images')as $image){
                 $name = $image->getClientOriginalName();
                 $image->move(public_path('upload'),$name);
                 $data[] = $name;
             }
+            $cake->images = json_encode($data);
         }
-        $filename1 = time(). "." . $request->image->extension();
-        $request->image->move(public_path("upload"), $filename1);
+        else{
+            $cake->images == null;
+        }
 
-        $cake = new Cake();
         $cake->category_id = $request->category_id;
         $cake->title = $request->title;
         $cake->price = $request->price;
@@ -200,10 +209,29 @@ class Admin extends Controller
         $cake->serve = $request->serve;
         $cake->delivired = $request->delivired;
         $cake->parent_id = $request->parent_id;
+        $cake->meta_keywords = $request->meta_keywords;
+        $cake->meta_description = $request->meta_description;
         $cake->image = $filename1;
-        $cake->images = json_encode($data);
+        
         $cake->save();
         return redirect()->back();
+    }
+
+    //Reset Password
+
+    public function editPassword($id){
+        $data = [
+            'edits' =>User::findOrFail($id),
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
+        ];
+        return view('admin.reset_password', $data);
+    }
+
+    public function updatePassword(Request $request ,$id){
+        $user = User::findOrFail($id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return redirect()->route('vendors.show',['vendor'=>$user->id]);
     }
 
     public function editcake($id){
@@ -254,6 +282,8 @@ class Admin extends Controller
         $cake->serve = $request->serve;
         $cake->delivired = $request->delivired;
         $cake->parent_id = $request->parent_id;
+        $cake->meta_keywords = $request->meta_keywords;
+        $cake->meta_description = $request->meta_description;
        
         $cake->save();
 

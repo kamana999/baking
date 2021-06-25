@@ -15,6 +15,9 @@ class Vendor extends Model
     public function state(){
         return $this->belongsTo('App\Models\State');
     }
+    public function district(){
+        return $this->belongsTo('App\Models\District');
+    }
     public function area(){
         return $this->belongsTo('App\Models\Area');
     }
@@ -24,5 +27,9 @@ class Vendor extends Model
     public function cake(){
         
         return $this->hasMany(Cake::class, 'vendor_id');
+    }
+    public function order(){
+        
+        return $this->hasMany(Order::class, 'vendor_id');
     }
 }

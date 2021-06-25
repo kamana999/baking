@@ -51,16 +51,20 @@ class CategoryController extends Controller
             'cat_title'=>'required',
             'description'=>'required',
             'image'=>'required',
-            'parent_id' => 'sometimes|nullable|numeric'
+            'parent_id' => 'sometimes|nullable|numeric',
+            'meta_keywords' => 'sometimes|nullable',
+            'meta_description' => 'sometimes|nullable',
             
         ]);
 
         $filename = time(). "." . $request->image->extension();
         $request->image->move(public_path("upload"), $filename);
-
+        
         $category = new Category();
         $category->cat_title = $request->cat_title;
         $category->description = $request->description;
+        $category->meta_keywords = $request->meta_keywords;
+        $category->meta_description = $request->meta_description;
         $category->parent_id = $request->parent_id;
         $category->image = $filename;
         $category->save();
@@ -74,9 +78,14 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        $data = [
+            'category'=>$category,
+            'profile'=>Vendor::where(array(['user_id',Auth::id()]))->first(),
+            // 'vendorss'=> Vendor::where('user_id',Auth::id())->firstOrFail(),
+        ];
+        return view('admin.show_category',$data);
     }
 
     /**
