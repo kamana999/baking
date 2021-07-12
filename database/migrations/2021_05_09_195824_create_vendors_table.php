@@ -24,7 +24,7 @@ class CreateVendorsTable extends Migration
             $table->foreignId('state_id')->constrained('states')->onDelete('cascade');
             $table->foreignId('district_id')->constrained('districts')->onDelete('cascade');
             $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
-            $table->string('street');
+            $table->integer('pancard');
             $table->timestamps();
         });
     }

@@ -123,6 +123,7 @@ class Admin extends Controller
         $request->image->move(public_path("upload"), $filename);
 
         $vendor = new Vendor();
+        
         $vendor->contact = $request->input('contact');
         $vendor->contact2 = $request->input('contact2');
         $vendor->description = $request->input('description');
